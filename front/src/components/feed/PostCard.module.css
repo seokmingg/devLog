@@ -1,0 +1,30 @@
+.card { overflow: hidden; margin-bottom: 18px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-surface); }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; }
+.author { display: flex; align-items: center; gap: 10px; }
+.author > div { display: flex; align-items: baseline; gap: 9px; }
+.author span { color: var(--color-muted); font-size: 12px; }
+.more, .actions button { border: 0; background: transparent; cursor: pointer; }
+.more { font-size: 20px; }
+.code { min-height: 330px; margin: 0 16px; padding: 24px; overflow: auto; border-radius: 10px; color: #d1d5db; background: radial-gradient(circle at top right, #182132, #0b111b 60%); font: 15px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.diagram { padding: 22px 20px 36px; background: #fff; }
+.diagram h3 { margin: 0 0 22px; font-weight: 600; }
+.diagram div { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
+.diagram span { padding: 16px 18px; border: 2px solid #111827; border-radius: 8px; text-align: center; }
+.actions { display: flex; justify-content: space-between; padding: 12px 16px 0; }
+.actions div { display: flex; gap: 14px; }
+.actions button { font-size: 28px; }
+.actions .selected { color: var(--color-primary); }
+.body { padding: 0 16px 16px; font-size: 14px; }
+.body p { margin: 7px 0; line-height: 1.6; }
+.hashtags { color: var(--color-primary); }
+.muted { color: var(--color-muted); }
+.comment { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 9px 12px; border: 1px solid var(--color-line); border-radius: 999px; color: var(--color-muted); }
+.comment span:nth-child(2) { flex: 1; }
+@media (max-width: 760px) {
+  .card { margin: 0 10px 14px; border-radius: 14px; }
+  .code { min-height: 255px; margin: 0 12px; padding: 16px; font-size: 11px; }
+  .author > div { display: block; }
+  .author span { display: block; margin-top: 2px; }
+  .diagram div { gap: 8px; }
+  .diagram span { padding: 11px; font-size: 12px; }
+}

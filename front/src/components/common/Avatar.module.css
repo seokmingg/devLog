@@ -1,0 +1,8 @@
+.avatar { display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; color: #0f172a; font-weight: 800; }
+.small { width: 38px; height: 38px; font-size: 11px; }
+.tiny { width: 28px; height: 28px; font-size: 9px; }
+.large { width: 72px; height: 72px; font-size: 18px; }
+.blue { background: linear-gradient(135deg, #dbeafe, #93c5fd); }
+.pink { background: linear-gradient(135deg, #fce7f3, #f9a8d4); }
+.yellow { background: linear-gradient(135deg, #fef3c7, #fcd34d); }
+@media (max-width: 760px) { .large { width: 60px; height: 60px; } }

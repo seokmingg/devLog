@@ -1,0 +1,13 @@
+.rail { display: grid; align-content: start; gap: 14px; }
+.card { padding: 18px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: white; }
+.title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.title h2 { margin: 0; font-size: 16px; }
+.title a { color: var(--color-primary); font-size: 12px; font-weight: 700; }
+.list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.list li { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.person { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.person strong { display: block; overflow: hidden; margin-bottom: 3px; font-size: 13px; text-overflow: ellipsis; }
+.person span { display: block; color: var(--color-muted); font-size: 12px; line-height: 1.45; white-space: pre-line; }
+.list button { flex: 0 0 auto; padding: 8px 12px; border: 1px solid #bfdbfe; border-radius: 9px; color: var(--color-primary); background: white; font-weight: 700; cursor: pointer; }
+.list .followed { color: white; background: var(--color-primary); }
+@media (max-width: 1100px) { .rail { display: none; } }

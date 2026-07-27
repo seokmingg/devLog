@@ -1,0 +1,19 @@
+.header { position: sticky; top: 0; z-index: 9; display: grid; grid-template-columns: minmax(260px, 520px) auto; align-items: center; gap: 24px; min-height: 82px; padding: 0 42px; border-bottom: 1px solid var(--color-line); background: rgb(255 255 255 / 92%); backdrop-filter: blur(16px); }
+.mobileBrand { display: none; font-size: 24px; font-weight: 800; }
+.search { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; border-radius: 999px; background: #f3f4f6; }
+.search span { color: var(--color-muted); font-size: 21px; }
+.search input { width: 100%; border: 0; outline: 0; background: transparent; }
+.actions { display: flex; justify-content: flex-end; align-items: center; gap: 18px; }
+.actions button { border: 0; background: transparent; cursor: pointer; }
+.iconButton { font-size: 31px; line-height: 1; }
+.createButton { width: 42px; height: 42px; border-radius: 10px; color: white !important; background: var(--color-primary) !important; font-size: 29px; }
+.profileButton { display: block; padding: 0; border-radius: 50%; }
+@media (max-width: 760px) {
+  .header { grid-template-columns: auto minmax(110px, 1fr) auto; min-height: 64px; padding: 0 14px; gap: 10px; }
+  .mobileBrand { display: block; }
+  .search { height: 38px; padding-inline: 12px; }
+  .actions { gap: 9px; }
+  .profileButton { display: none; }
+  .iconButton { font-size: 26px; }
+  .createButton { width: 34px; height: 34px; border: 1px solid #d1d5db !important; color: var(--color-text) !important; background: white !important; font-size: 24px; }
+}
