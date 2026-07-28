@@ -10,7 +10,8 @@ export function Main() {
       <section className={styles.feed} aria-label="게시글 피드">
         <TechStrip />
         {posts.map(post => <PostCard post={post} key={post.id} />)}
-        <div className={styles.loading}>◌ 더 많은 게시글을 불러오는 중...</div>
+          {/*  Todo 로딩 중 표시 만들어야함*/}
+          {/*<div className={styles.loading}>◌ 더 많은 게시글을 불러오는 중...</div>*/}
       </section>
       <PeopleRail recommendations={recommendations} following={following} followers={followers} />
     </main>
