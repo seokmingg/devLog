@@ -1,6 +1,6 @@
-import { PeopleRail } from '../../components/feed/PeopleRail'
-import { PostCard } from '../../components/feed/PostCard'
-import { TechStrip } from '../../components/feed/TechStrip'
+import { PeopleRail } from '../../components/feed/peopleRail/PeopleRail.tsx'
+import { PostCard } from '../../components/feed/postCard/PostCard.tsx'
+import { TechStrip } from '../../components/feed/techStrip/TechStrip.tsx'
 import { followers, following, posts, recommendations } from '../../data/mockFeed'
 import styles from './Main.module.css'
 

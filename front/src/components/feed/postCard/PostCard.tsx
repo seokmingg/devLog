@@ -1,6 +1,6 @@
 import {useState} from 'react'
-import type {Post} from '../../types/feed'
-import {Avatar} from '../common/Avatar'
+import type {Post} from '../../../types/feed.ts'
+import {Avatar} from '../../common/Avatar.tsx'
 import styles from './PostCard.module.css'
 
 const code = `@Service

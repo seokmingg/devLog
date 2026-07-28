@@ -1,4 +1,4 @@
-import { Avatar } from '../common/Avatar'
+import { Avatar } from '../../common/Avatar.tsx'
 import styles from './TechStrip.module.css'
 
 const technologies = [
