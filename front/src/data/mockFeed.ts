@@ -3,19 +3,38 @@ import type { Person, Post } from '../types/feed'
 export const posts: Post[] = [
   {
     id: 1,
+    title: '오늘은 DevLog 기능 구현을 마무리했다! 💪',
+    contents: `@Service
+public class DevLogService {
+
+    public void create(DevLog log) {
+        if (log.getTitle() == null ||
+            log.getTitle().isBlank()) {
+            throw new IllegalArgumentException(
+                "제목은 필수입니다."
+            );
+        }
+
+        logRepository.save(log);
+    }
+}`,
     author: { initials: 'CL', name: 'code_lover', tone: 'blue' },
     createdAt: '2시간 전',
     kind: 'code',
     likes: 124,
-    content: '오늘은 DevLog 기능 구현을 마무리했다! 💪',
     hashtags: ['Spring', 'Java', 'Backend', 'DevLog'],
-    comments: 8,
+    commentCount: 100,
   },
   {
     id: 2,
+    title: 'Spring Security 흐름 정리',
+    contents: 'Request부터 인증 처리와 DB 조회까지의 흐름을 정리했습니다.',
     author: { initials: 'DJ', name: 'dev_jane', tone: 'pink' },
     createdAt: '5시간 전',
     kind: 'diagram',
+    likes: 45,
+    hashtags: ['SpringSecurity', 'Backend'],
+    commentCount: 0,
   },
 ]
 
