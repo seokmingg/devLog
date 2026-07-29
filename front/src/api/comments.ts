@@ -13,5 +13,13 @@ export async function getPostComments(
         },
     )
 
+    if (
+        !response.data
+        || typeof response.data !== 'object'
+        || !Array.isArray(response.data.content)
+    ) {
+        throw new Error('Invalid comments response')
+    }
+
     return response.data
 }
