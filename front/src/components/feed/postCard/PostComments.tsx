@@ -2,6 +2,7 @@ import {useState} from 'react'
 import type {CommentResponseDto} from '../../../types/feed.ts'
 import {getPostComments} from '../../../api/comments.ts'
 import {Avatar} from '../../common/Avatar.tsx'
+import {CommentForm} from './CommentForm.tsx'
 import styles from './PostCard.module.css'
 
 const COMMENT_PAGE_SIZE = 10
@@ -108,11 +109,7 @@ export function PostComments({postId, commentCount}: PostCommentsProps) {
                 </div>
             )}
 
-            <div className={styles.comment}>
-                <Avatar initials="SM" size="tiny"/>
-                <span>댓글 달기...</span>
-                <span>☺</span>
-            </div>
+            <CommentForm/>
         </div>
     )
 }
