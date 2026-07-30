@@ -23,7 +23,8 @@ public class DevLogService {
     kind: 'code',
     likes: 124,
     hashtags: ['Spring', 'Java', 'Backend', 'DevLog'],
-    commentCount: 100,
+    commentCount: 15,
+    isMine: true,
   },
   {
     id: 2,
@@ -35,6 +36,7 @@ public class DevLogService {
     likes: 45,
     hashtags: ['SpringSecurity', 'Backend'],
     commentCount: 0,
+    isMine: false,
   },
 ]
 
