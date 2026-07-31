@@ -1,5 +1,5 @@
-import {Avatar} from '../../common/Avatar.tsx'
-import styles from './PostCard.module.css'
+import {Avatar} from '../../../common/Avatar.tsx'
+import styles from '../PostCard.module.css'
 
 export function CommentForm() {
     return (

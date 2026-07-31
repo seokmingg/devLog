@@ -1,9 +1,11 @@
 import {useState} from 'react'
-import type {CommentResponseDto} from '../../../types/feed.ts'
-import {getPostComments} from '../../../api/comments.ts'
-import {Avatar} from '../../common/Avatar.tsx'
+import type {CommentResponseDto} from '../../../../types/feed.ts'
+// 백엔드 연결 후 아래 mock import를 실제 API import로 교체한다.
+// import {getPostComments} from '../../../../api/comments.ts'
+import {getMockPostComments as getPostComments} from '../../../../data/mockComments.ts'
 import {CommentForm} from './CommentForm.tsx'
-import styles from './PostCard.module.css'
+import {CommentItem} from './CommentItem.tsx'
+import styles from '../PostCard.module.css'
 
 const COMMENT_PAGE_SIZE = 10
 
@@ -74,19 +76,7 @@ export function PostComments({postId, commentCount}: PostCommentsProps) {
             {commentsOpen && (
                 <div id={commentsId} className={styles.commentsList}>
                     {comments.map(comment => (
-                        <div className={styles.commentItem} key={comment.id}>
-                            <Avatar
-                                initials={comment.authorName.slice(0, 2).toUpperCase()}
-                                size="tiny"
-                            />
-                            <div>
-                                <div className={styles.commentMeta}>
-                                    <strong>{comment.authorName}</strong>
-                                    <span>{comment.createdAt}</span>
-                                </div>
-                                <p>{comment.contents}</p>
-                            </div>
-                        </div>
+                        <CommentItem comment={comment} key={comment.id}/>
                     ))}
 
                     {commentsError && (
