@@ -2,13 +2,18 @@ import type {Post} from '../../../types/feed.ts'
 import {PostActions} from './PostActions.tsx'
 import {PostCardContent} from './PostCardContent.tsx'
 import {PostCardHeader} from './PostCardHeader.tsx'
-import {PostComments} from './PostComments.tsx'
+import {PostComments} from './postComments/PostComments.tsx'
 import styles from './PostCard.module.css'
 
 export function PostCard({post}: { post: Post }) {
     return (
         <article className={styles.card}>
-            <PostCardHeader author={post.author} createdAt={post.createdAt}/>
+            <PostCardHeader
+                postId={post.id}
+                author={post.author}
+                createdAt={post.createdAt}
+                isMine={post.isMine ?? false}
+            />
             <PostCardContent
                 title={post.title}
                 contents={post.contents}
