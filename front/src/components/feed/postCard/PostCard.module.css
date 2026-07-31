@@ -1,44 +1,335 @@
-.card { overflow: hidden; margin-bottom: 18px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-surface); }
-.header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; }
-.author { display: flex; align-items: center; gap: 10px; }
-.author > div { display: flex; align-items: baseline; gap: 9px; }
-.author span { color: var(--color-muted); font-size: 12px; }
-.more, .actions button { border: 0; background: transparent; cursor: pointer; }
-.more { font-size: 20px; }
-.title { margin: 0; padding: 0 16px 14px; font-size: 19px; line-height: 1.4; }
-.code { min-height: 330px; margin: 0 16px; padding: 24px; overflow: auto; border-radius: 10px; color: #d1d5db; background: radial-gradient(circle at top right, #182132, #0b111b 60%); font: 15px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
-.diagram { padding: 22px 20px 36px; background: #fff; }
-.diagram div { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
-.diagram span { padding: 16px 18px; border: 2px solid #111827; border-radius: 8px; text-align: center; }
-.actions { display: flex; justify-content: space-between; align-items: center; margin: 12px 0 8px; padding-top: 10px; border-top: 1px solid var(--color-line); }
-.actions .likes { display: flex; align-items: center; gap: 8px; }
-.actions button { font-size: 28px; }
-.actions .selected { color: var(--color-primary); }
-.contentBody, .actionsSection, .commentsSection { padding: 0 16px; font-size: 14px; }
-.contentBody p, .commentsSection p { margin: 7px 0; line-height: 1.6; }
-.commentsSection { padding-bottom: 16px; }
-.hashtags { color: var(--color-primary); }
-.muted { color: var(--color-muted); }
-.commentsToggle { padding: 0; border: 0; color: var(--color-muted); background: transparent; font: inherit; cursor: pointer; }
-.commentsToggle:hover { color: var(--color-text); text-decoration: underline; }
-.commentsList { max-height: 280px; margin-top: 12px; overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--color-line); border-bottom: 1px solid var(--color-line); }
-.commentItem { display: flex; align-items: flex-start; gap: 10px; padding: 12px 4px; }
-.commentItem + .commentItem { border-top: 1px solid var(--color-line); }
-.commentItem > div { min-width: 0; flex: 1; }
-.commentMeta { display: flex; align-items: baseline; gap: 8px; }
-.commentMeta span { color: var(--color-muted); font-size: 12px; }
-.commentItem p { margin: 3px 0 0; overflow-wrap: anywhere; }
-.commentsStatus { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 14px; color: var(--color-muted); text-align: center; }
-.commentsStatus button, .loadMore { border: 0; color: var(--color-primary); background: transparent; font: inherit; cursor: pointer; }
-.loadMore { display: block; width: 100%; padding: 12px; border-top: 1px solid var(--color-line); }
-.loadMore:hover, .commentsStatus button:hover { text-decoration: underline; }
-.comment { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 9px 12px; border: 1px solid var(--color-line); border-radius: 999px; color: var(--color-muted); }
-.comment span:nth-child(2) { flex: 1; }
+.card {
+    overflow: hidden;
+    margin-bottom: 18px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+}
+
+.author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.author > div {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+}
+
+.author span {
+    color: var(--color-muted);
+    font-size: 12px;
+}
+
+.more, .actions button {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.more {
+    font-size: 20px;
+}
+
+.postMenu {
+    position: relative;
+}
+
+.postMenuList {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 6px);
+    right: 0;
+    display: grid;
+    min-width: 120px;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 10px;
+    background: var(--color-surface);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, .14);
+}
+
+.postMenuList button {
+    padding: 10px 14px;
+    border: 0;
+    color: var(--color-text);
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.postMenuList button:hover {
+    background: var(--color-background);
+}
+
+.postMenuList .dangerMenuItem {
+    color: #dc2626;
+}
+
+.menuMessage {
+    position: absolute;
+    z-index: 9;
+    top: calc(100% + 6px);
+    right: 0;
+    width: max-content;
+    max-width: 240px;
+    padding: 8px 10px;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    color: var(--color-muted);
+    background: var(--color-surface);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, .1);
+    font-size: 12px;
+}
+
+.title {
+    margin: 0;
+    padding: 0 16px 14px;
+    font-size: 19px;
+    line-height: 1.4;
+}
+
+.contentScroll {
+    max-height: 420px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+}
+
+.code {
+    min-height: 330px;
+    margin: 0 16px;
+    padding: 24px;
+    overflow-x: auto;
+    border-radius: 10px;
+    color: #d1d5db;
+    background: radial-gradient(circle at top right, #182132, #0b111b 60%);
+    font: 15px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.diagram {
+    padding: 22px 20px 36px;
+    background: #fff;
+}
+
+.diagram div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.diagram span {
+    padding: 16px 18px;
+    border: 2px solid #111827;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-line);
+}
+
+.actions .likes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.actions button {
+    font-size: 28px;
+}
+
+.actions .selected {
+    color: var(--color-primary);
+}
+
+.contentBody, .actionsSection, .commentsSection {
+    padding: 0 16px;
+    font-size: 14px;
+}
+
+.contentBody p, .commentsSection p {
+    margin: 7px 0;
+    line-height: 1.6;
+}
+
+.commentsSection {
+    padding-bottom: 16px;
+}
+
+.hashtags {
+    color: var(--color-primary);
+}
+
+.muted {
+    color: var(--color-muted);
+}
+
+.commentsToggle {
+    padding: 0;
+    border: 0;
+    color: var(--color-muted);
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
+.commentsToggle:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+}
+
+.commentsList {
+    max-height: 280px;
+    margin-top: 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+}
+
+.commentItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 4px;
+}
+
+.commentItem + .commentItem {
+    border-top: 1px solid var(--color-line);
+}
+
+.commentItem > div {
+    min-width: 0;
+    flex: 1;
+}
+
+.commentMeta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.commentMeta span {
+    color: var(--color-muted);
+    font-size: 12px;
+}
+
+.commentItem p {
+    margin: 3px 0 0;
+    overflow-wrap: anywhere;
+}
+
+.commentContentsCollapsed {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.commentExpandButton {
+    padding: 2px 0;
+    border: 0;
+    color: var(--color-muted);
+    background: transparent;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.commentExpandButton:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+}
+
+.commentsStatus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 14px;
+    color: var(--color-muted);
+    text-align: center;
+}
+
+.commentsStatus button, .loadMore {
+    border: 0;
+    color: var(--color-primary);
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+}
+
+.loadMore {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border-top: 1px solid var(--color-line);
+}
+
+.loadMore:hover, .commentsStatus button:hover {
+    text-decoration: underline;
+}
+
+.comment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-muted);
+}
+
+.comment span:nth-child(2) {
+    flex: 1;
+}
+
 @media (max-width: 760px) {
-  .card { margin: 0 10px 14px; border-radius: 14px; }
-  .code { min-height: 255px; margin: 0 12px; padding: 16px; font-size: 11px; }
-  .author > div { display: block; }
-  .author span { display: block; margin-top: 2px; }
-  .diagram div { gap: 8px; }
-  .diagram span { padding: 11px; font-size: 12px; }
+    .card {
+        margin: 0 10px 14px;
+        border-radius: 14px;
+    }
+
+    .code {
+        min-height: 255px;
+        margin: 0 12px;
+        padding: 16px;
+        font-size: 11px;
+    }
+
+    .author > div {
+        display: block;
+    }
+
+    .author span {
+        display: block;
+        margin-top: 2px;
+    }
+
+    .diagram div {
+        gap: 8px;
+    }
+
+    .diagram span {
+        padding: 11px;
+        font-size: 12px;
+    }
 }
