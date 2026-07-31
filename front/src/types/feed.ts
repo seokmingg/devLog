@@ -31,6 +31,7 @@ export interface PostResponseDto {
   likes: number
   hashtags: string[]
   commentCount: number
+  isMine?: boolean
 }
 
 export type Post = PostResponseDto
