@@ -30,4 +30,4 @@ export function Main() {
   )
 }
 import { useState } from 'react'
-import { getPost } from '../../api/posts.ts'
+import { getPost } from '../../api/feed/postCard/posts.ts'

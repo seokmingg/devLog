@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {likePost, unlikePost} from '../../../api/likes.ts'
+import {likePost, unlikePost} from '../../../api/feed/postCard/likes.ts'
 import styles from './PostCard.module.css'
 
 interface PostActionsProps {

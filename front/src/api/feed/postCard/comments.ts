@@ -1,5 +1,5 @@
-import type {CommentPageResponseDto} from '../types/feed.ts'
-import {apiClient} from './client.ts'
+import type {CommentPageResponseDto} from '../../../types/feed.ts'
+import {apiClient} from '../../client.ts'
 
 export async function getPostComments(
     postId: number,

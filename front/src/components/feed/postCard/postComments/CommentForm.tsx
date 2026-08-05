@@ -1,5 +1,5 @@
 import {useState, type FormEvent} from 'react'
-import {createPostComment} from '../../../../api/comments.ts'
+import {createPostComment} from '../../../../api/feed/postCard/comments.ts'
 import {Avatar} from '../../../common/Avatar.tsx'
 import styles from '../PostCard.module.css'
 

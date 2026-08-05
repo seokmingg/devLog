@@ -1,4 +1,4 @@
-import {apiClient} from './client.ts'
+import {apiClient} from '../../client.ts'
 
 export async function likePost(postId: number): Promise<void> {
     await apiClient.put(`/posts/${postId}/likes`)
