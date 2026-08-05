@@ -23,3 +23,10 @@ export async function getPostComments(
 
     return response.data
 }
+
+export async function createPostComment(
+    postId: number,
+    contents: string,
+): Promise<void> {
+    await apiClient.post(`/posts/${postId}/comments`, {contents})
+}
