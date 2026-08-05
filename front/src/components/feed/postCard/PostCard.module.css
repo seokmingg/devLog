@@ -160,6 +160,17 @@
     color: var(--color-primary);
 }
 
+.actions button:disabled {
+    opacity: .5;
+    cursor: default;
+}
+
+.actionError {
+    margin: 4px 0 8px;
+    color: #dc2626;
+    font-size: 12px;
+}
+
 .contentBody, .actionsSection, .commentsSection {
     padding: 0 16px;
     font-size: 14px;
@@ -298,8 +309,38 @@
     color: var(--color-muted);
 }
 
-.comment span:nth-child(2) {
+.comment input {
+    min-width: 0;
     flex: 1;
+    border: 0;
+    outline: none;
+    color: var(--color-text);
+    background: transparent;
+    font: inherit;
+}
+
+.comment input::placeholder {
+    color: var(--color-muted);
+}
+
+.comment button {
+    padding: 4px 6px;
+    border: 0;
+    color: var(--color-primary);
+    background: transparent;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.comment button:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+.commentError {
+    color: #dc2626;
+    font-size: 12px;
 }
 
 @media (max-width: 760px) {
