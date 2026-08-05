@@ -5,7 +5,12 @@ import {PostCardHeader} from './PostCardHeader.tsx'
 import {PostComments} from './postComments/PostComments.tsx'
 import styles from './PostCard.module.css'
 
-export function PostCard({post}: { post: Post }) {
+interface PostCardProps {
+    post: Post
+    onRefresh: (postId: number) => Promise<void>
+}
+
+export function PostCard({post, onRefresh}: PostCardProps) {
     return (
         <article className={styles.card}>
             <PostCardHeader
@@ -20,8 +25,17 @@ export function PostCard({post}: { post: Post }) {
                 kind={post.kind}
                 hashtags={post.hashtags}
             />
-            <PostActions initialLikeCount={post.likes}/>
-            <PostComments postId={post.id} commentCount={post.commentCount}/>
+            <PostActions
+                postId={post.id}
+                likeCount={post.likes}
+                likedByMe={post.likedByMe}
+                onPostRefresh={onRefresh}
+            />
+            <PostComments
+                postId={post.id}
+                commentCount={post.commentCount}
+                onPostRefresh={onRefresh}
+            />
         </article>
     )
 }
