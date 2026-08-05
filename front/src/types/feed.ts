@@ -29,6 +29,7 @@ export interface PostResponseDto {
   createdAt: string
   kind: 'code' | 'diagram'
   likes: number
+  likedByMe: boolean
   hashtags: string[]
   commentCount: number
   isMine?: boolean
