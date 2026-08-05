@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import type {CommentResponseDto} from '../../../../types/feed.ts'
-// 백엔드 연결 후 아래 mock import를 실제 API import로 교체한다.
 // import {getPostComments} from '../../../../api/comments.ts'
 import {getMockPostComments as getPostComments} from '../../../../data/mockComments.ts'
+
 import {CommentForm} from './CommentForm.tsx'
 import {CommentItem} from './CommentItem.tsx'
 import styles from '../PostCard.module.css'
@@ -12,9 +12,10 @@ const COMMENT_PAGE_SIZE = 10
 interface PostCommentsProps {
     postId: number
     commentCount: number
+    onPostRefresh: (postId: number) => Promise<void>
 }
 
-export function PostComments({postId, commentCount}: PostCommentsProps) {
+export function PostComments({postId, commentCount, onPostRefresh}: PostCommentsProps) {
     const [commentsOpen, setCommentsOpen] = useState(false)
     const [comments, setComments] = useState<CommentResponseDto[]>([])
     const [commentPage, setCommentPage] = useState(0)
@@ -55,6 +56,14 @@ export function PostComments({postId, commentCount}: PostCommentsProps) {
         if (!commentsLoaded) {
             await loadComments(0)
         }
+    }
+
+    const refreshAfterCommentCreated = async () => {
+        setCommentsOpen(true)
+        await Promise.all([
+            loadComments(0),
+            onPostRefresh(postId),
+        ])
     }
 
     return (
@@ -99,7 +108,10 @@ export function PostComments({postId, commentCount}: PostCommentsProps) {
                 </div>
             )}
 
-            <CommentForm/>
+            <CommentForm
+                postId={postId}
+                onCommentCreated={refreshAfterCommentCreated}
+            />
         </div>
     )
 }
