@@ -1,0 +1,21 @@
+.feed {
+    min-width: 0;
+}
+
+.loading, .error, .endMessage {
+    padding: 16px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.loading, .endMessage {
+    color: var(--color-muted);
+}
+
+.error {
+    color: #dc2626;
+}
+
+.loadMoreTrigger {
+    height: 1px;
+}
