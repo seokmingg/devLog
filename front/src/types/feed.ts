@@ -35,4 +35,10 @@ export interface PostResponseDto {
   isMine?: boolean
 }
 
+export interface PostCursorResponseDto {
+  content: PostResponseDto[]
+  nextCursor: number | null
+  hasNext: boolean
+}
+
 export type Post = PostResponseDto
