@@ -1,0 +1,53 @@
+.page {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 24px;
+    background: linear-gradient(145deg, #eff6ff 0%, #fafafa 48%, #eef2ff 100%);
+}
+
+.card {
+    width: min(100%, 460px);
+    padding: 42px 32px;
+    border: 1px solid var(--color-line);
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 24px 60px rgb(15 23 42 / 10%);
+    text-align: center;
+}
+
+.card h1 {
+    margin: 14px 0 10px;
+    font-size: 24px;
+}
+
+.card p {
+    margin: 0 0 24px;
+    color: var(--color-muted);
+    font-size: 14px;
+}
+
+.card a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
+    color: white;
+    background: var(--color-primary);
+    font-weight: 700;
+}
+
+.spinner {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 42px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
