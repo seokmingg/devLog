@@ -5,6 +5,7 @@
 .heading { margin: 38px 0 28px; }
 .heading h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: -0.03em; }
 .heading p, .signup { margin: 0; color: var(--color-muted); font-size: 14px; }
+.success { margin: -12px 0 22px; padding: 12px 14px; border-radius: 10px; color: #166534; background: #f0fdf4; font-size: 13px; line-height: 1.5; }
 .form { display: grid; gap: 18px; }
 .form > label { display: grid; gap: 8px; font-size: 14px; font-weight: 700; }
 .form input:not([type='checkbox']) { width: 100%; height: 48px; padding: 0 14px; border: 1px solid #d1d5db; border-radius: 10px; outline: none; background: white; }
@@ -14,6 +15,11 @@
 .options a { color: var(--color-primary); }
 .form > button { height: 50px; border: 0; border-radius: 10px; color: white; background: var(--color-primary); font-weight: 700; cursor: pointer; }
 .form > button:hover { background: #1d4ed8; }
+.divider { display: flex; align-items: center; gap: 14px; margin: 24px 0; color: var(--color-muted); font-size: 13px; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--color-line); }
+.googleButton { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; height: 50px; border: 1px solid #d1d5db; border-radius: 10px; background: white; font-weight: 700; cursor: pointer; }
+.googleButton:hover { background: #f9fafb; border-color: #9ca3af; }
+.googleMark { color: #4285f4; font-family: Arial, sans-serif; font-size: 20px; font-weight: 800; }
 .signup { margin-top: 24px; text-align: center; }
 .signup a { color: var(--color-primary); font-weight: 700; }
 @media (max-width: 520px) { .card { padding: 28px 22px; border-radius: 18px; } }
