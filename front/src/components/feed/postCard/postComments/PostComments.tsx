@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import type {CommentResponseDto} from '../../../../types/feed.ts'
-// import {getPostComments} from '../../../../api/comments.ts'
-import {getMockPostComments as getPostComments} from '../../../../data/mockComments.ts'
+import {getPostComments} from "../../../../api/feed/postCard/comments.ts";
+// import {getMockPostComments as getPostComments} from '../../../../data/mockComments.ts'
 
 import {CommentForm} from './CommentForm.tsx'
 import {CommentItem} from './CommentItem.tsx'
