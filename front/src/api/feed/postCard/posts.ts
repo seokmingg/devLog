@@ -35,3 +35,7 @@ export async function createPost(request: CreatePostRequestDto): Promise<PostRes
     const response = await apiClient.post<PostResponseDto>('/posts', request)
     return response.data
 }
+
+export async function deletePost(postId: number): Promise<void> {
+    await apiClient.delete(`/posts/${postId}`)
+}

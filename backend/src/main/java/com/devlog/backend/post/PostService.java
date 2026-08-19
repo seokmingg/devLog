@@ -119,6 +119,20 @@ public class PostService {
         );
     }
 
+    @Transactional
+    public void deletePost(Long memberId, Long postId) {
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
+
+        if (post.getMember() == null || !post.getMember().getId().equals(memberId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인이 작성한 게시글만 삭제할 수 있습니다.");
+        }
+
+        commentRepository.deleteAllByPostId(postId);
+        postTagRepository.deleteAllByPostId(postId);
+        postRepository.delete(post);
+    }
+
     private PostResponse toResponse(Post post, Long currentMemberId) {
         List<String> tags = postTagRepository.findAllByPostIdOrderByIdAsc(post.getId()).stream()
             .map(PostTag::getTag)

@@ -21,6 +21,7 @@ export function PostFeed() {
         hasNext,
         loadMoreRef,
         refreshPost,
+        removePost,
     } = usePostFeed(selectedTag, query)
 
     return (
@@ -43,7 +44,7 @@ export function PostFeed() {
             )}
 
             {!initialLoading && feedPosts.map(post => (
-                <PostCard post={post} onRefresh={refreshPost} key={post.id}/>
+                <PostCard post={post} onRefresh={refreshPost} onDelete={removePost} key={post.id}/>
             ))}
 
             {!initialLoading && !feedError && feedPosts.length === 0 && (

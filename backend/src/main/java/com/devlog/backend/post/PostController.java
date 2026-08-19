@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,5 +54,14 @@ public class PostController {
         @Valid @RequestBody CreatePostRequest request
     ) {
         return postService.createPost(Long.valueOf(jwt.getSubject()), request);
+    }
+
+    @DeleteMapping("/{postId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePost(
+        @AuthenticationPrincipal Jwt jwt,
+        @PathVariable Long postId
+    ) {
+        postService.deletePost(Long.valueOf(jwt.getSubject()), postId);
     }
 }

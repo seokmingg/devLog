@@ -22,6 +22,10 @@ export function usePostFeed(tag?: string, query?: string) {
         ))
     }
 
+    const removePost = (postId: number) => {
+        setFeedPosts(current => current.filter(post => post.id !== postId))
+    }
+
     const loadMorePosts = useCallback(async () => {
         if (loadingMoreRef.current || loadedFilterKey !== filterKey || !hasNext || nextCursor === null) return
 
@@ -105,5 +109,6 @@ export function usePostFeed(tag?: string, query?: string) {
         hasNext,
         loadMoreRef,
         refreshPost,
+        removePost,
     }
 }

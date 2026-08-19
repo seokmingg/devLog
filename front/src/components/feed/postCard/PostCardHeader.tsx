@@ -1,16 +1,19 @@
 import {useEffect, useRef, useState} from 'react'
 import type {Post} from '../../../types/feed.ts'
 import {Avatar} from '../../common/Avatar.tsx'
+import {deletePost} from '../../../api/feed/postCard/posts.ts'
 import styles from './PostCard.module.css'
 
 interface PostCardHeaderProps extends Pick<Post, 'author' | 'createdAt'> {
     postId: number
     isMine: boolean
+    onDelete: (postId: number) => void
 }
 
-export function PostCardHeader({postId, author, createdAt, isMine}: PostCardHeaderProps) {
+export function PostCardHeader({postId, author, createdAt, isMine, onDelete}: PostCardHeaderProps) {
     const [menuOpen, setMenuOpen] = useState(false)
     const [menuMessage, setMenuMessage] = useState<string | null>(null)
+    const [deleting, setDeleting] = useState(false)
     const menuRef = useRef<HTMLDivElement>(null)
     const menuId = `post-menu-${postId}`
 
@@ -41,6 +44,22 @@ export function PostCardHeader({postId, author, createdAt, isMine}: PostCardHead
     const showPreparingMessage = (message: string) => {
         setMenuMessage(message)
         setMenuOpen(false)
+    }
+
+    const handleDelete = async () => {
+        if (deleting) return
+        if (!window.confirm('정말 이 게시글을 삭제하시겠습니까?')) return
+
+        setDeleting(true)
+        setMenuMessage(null)
+        try {
+            await deletePost(postId)
+            onDelete(postId)
+        } catch {
+            setMenuOpen(false)
+            setMenuMessage('게시글을 삭제하지 못했습니다.')
+            setDeleting(false)
+        }
     }
 
     return (
@@ -89,9 +108,10 @@ export function PostCardHeader({postId, author, createdAt, isMine}: PostCardHead
                                     type="button"
                                     className={styles.dangerMenuItem}
                                     role="menuitem"
-                                    onClick={() => showPreparingMessage('게시글 삭제 기능을 준비 중입니다.')}
+                                    disabled={deleting}
+                                    onClick={handleDelete}
                                 >
-                                    삭제
+                                    {deleting ? '삭제 중...' : '삭제'}
                                 </button>
                             </>
                         ) : (

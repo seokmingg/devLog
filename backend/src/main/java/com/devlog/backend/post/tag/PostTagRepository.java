@@ -9,4 +9,6 @@ public interface PostTagRepository extends JpaRepository<PostTag, Long> {
     List<PostTag> findAllByPostIdOrderByIdAsc(Long postId);
 
     boolean existsByPostIdAndTagId(Long postId, Long tagId);
+
+    void deleteAllByPostId(Long postId);
 }

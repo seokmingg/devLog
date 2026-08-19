@@ -8,9 +8,10 @@ import styles from './PostCard.module.css'
 interface PostCardProps {
     post: Post
     onRefresh: (postId: number) => Promise<void>
+    onDelete: (postId: number) => void
 }
 
-export function PostCard({post, onRefresh}: PostCardProps) {
+export function PostCard({post, onRefresh, onDelete}: PostCardProps) {
     return (
         <article className={styles.card}>
             <PostCardHeader
@@ -18,6 +19,7 @@ export function PostCard({post, onRefresh}: PostCardProps) {
                 author={post.author}
                 createdAt={post.createdAt}
                 isMine={post.isMine ?? false}
+                onDelete={onDelete}
             />
             <PostCardContent
                 title={post.title}

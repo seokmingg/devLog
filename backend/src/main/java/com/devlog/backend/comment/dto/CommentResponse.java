@@ -1,5 +1,6 @@
 package com.devlog.backend.comment.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.devlog.backend.comment.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class CommentResponse {
     private final String authorProfileImageUrl;
     private final String contents;
     private final LocalDateTime createdAt;
+    @JsonProperty("isMine")
     private final boolean isMine;
 
     public static CommentResponse from(Comment comment, Long currentMemberId) {

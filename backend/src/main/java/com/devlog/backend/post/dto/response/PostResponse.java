@@ -1,5 +1,6 @@
 package com.devlog.backend.post.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.devlog.backend.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class PostResponse {
     private final boolean likedByMe;
     private final List<String> hashtags;
     private final long commentCount;
+    @JsonProperty("isMine")
     private final boolean isMine;
 
     public static PostResponse from(
