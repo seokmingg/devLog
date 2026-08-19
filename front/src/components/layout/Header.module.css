@@ -6,7 +6,7 @@
 .actions { display: flex; justify-content: flex-end; align-items: center; gap: 18px; }
 .actions button { border: 0; background: transparent; cursor: pointer; }
 .iconButton { font-size: 31px; line-height: 1; }
-.createButton { width: 42px; height: 42px; border-radius: 10px; color: white !important; background: var(--color-primary) !important; font-size: 29px; }
+.createButton { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; color: white !important; background: var(--color-primary) !important; font-size: 29px; line-height: 1; text-decoration: none; }
 .profile { display: flex; align-items: center; gap: 9px; min-width: 0; }
 .profile strong { max-width: 140px; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
 .profileLoading { width: 92px; height: 38px; border-radius: 999px; background: #f3f4f6; }

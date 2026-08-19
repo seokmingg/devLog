@@ -28,7 +28,7 @@ export function Header() {
       <label className={styles.search}><span>⌕</span><input type="search" placeholder="검색" aria-label="검색" /></label>
       <div className={styles.actions}>
         <button className={styles.iconButton} aria-label="알림">♡</button>
-        <button className={styles.createButton} aria-label="새 글 작성">＋</button>
+        <Link className={styles.createButton} to="/posts/new" aria-label="새 글 작성">＋</Link>
         {authLoading || !member ? (
           <span className={styles.profileLoading} aria-label="로그인 상태 확인 중"/>
         ) : (

@@ -23,23 +23,31 @@ public class PostResponse {
     private final long commentCount;
     private final boolean isMine;
 
-    public static PostResponse from(Post post) {
+    public static PostResponse from(Post post, Long currentMemberId, List<String> tags) {
+        boolean linkedMember = post.getMember() != null;
         return new PostResponse(
             post.getId(),
             post.getTitle(),
             post.getContents(),
             new AuthorResponse(
-                post.getAuthorInitials(),
-                post.getAuthorName(),
-                post.getAuthorTone()
+                linkedMember ? createInitials(post.getMember().getNickname()) : post.getAuthorInitials(),
+                linkedMember ? post.getMember().getNickname() : post.getAuthorName(),
+                post.getAuthorTone(),
+                linkedMember ? post.getMember().getProfileImageUrl() : null
             ),
             post.getCreatedAt(),
             post.getKind(),
             post.getLikes(),
             post.isLikedByMe(),
-            post.getHashtagList(),
+            tags,
             post.getCommentCount(),
-            post.isMine()
+            linkedMember
+                ? post.getMember().getId().equals(currentMemberId)
+                : post.isMine()
         );
+    }
+
+    private static String createInitials(String nickname) {
+        return nickname.substring(0, Math.min(2, nickname.length())).toUpperCase();
     }
 }

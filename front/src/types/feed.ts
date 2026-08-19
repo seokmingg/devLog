@@ -5,6 +5,7 @@ export interface Person {
   name: string
   description: string
   tone: Tone
+  profileImageUrl?: string | null
 }
 
 export interface CommentResponseDto {
@@ -27,7 +28,7 @@ export interface PostResponseDto {
   contents: string
   author: Omit<Person, 'description'>
   createdAt: string
-  kind: 'code' | 'diagram'
+  kind: 'code' | 'diagram' | 'text'
   likes: number
   likedByMe: boolean
   hashtags: string[]
@@ -42,3 +43,10 @@ export interface PostCursorResponseDto {
 }
 
 export type Post = PostResponseDto
+
+export interface CreatePostRequestDto {
+  title: string
+  contents: string
+  kind: 'text' | 'code'
+  tagIds: number[]
+}

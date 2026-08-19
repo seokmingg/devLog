@@ -46,7 +46,13 @@ export function PostCardHeader({postId, author, createdAt, isMine}: PostCardHead
     return (
         <header className={styles.header}>
             <div className={styles.author}>
-                <Avatar initials={author.initials} tone={author.tone}/>
+                <Avatar
+                    initials={author.initials}
+                    nickname={author.name}
+                    imageUrl={author.profileImageUrl}
+                    tone={author.tone}
+                    alt={`${author.name} 프로필`}
+                />
                 <div>
                     <strong>{author.name}</strong>
                     <span>{createdAt}</span>

@@ -1,4 +1,4 @@
-import type {PostCursorResponseDto, PostResponseDto} from '../../../types/feed.ts'
+import type {CreatePostRequestDto, PostCursorResponseDto, PostResponseDto} from '../../../types/feed.ts'
 import {apiClient} from '../../client.ts'
 
 const DEFAULT_POST_SIZE = 5
@@ -27,4 +27,9 @@ export async function getPosts(
     }
 
     return data
+}
+
+export async function createPost(request: CreatePostRequestDto): Promise<PostResponseDto> {
+    const response = await apiClient.post<PostResponseDto>('/posts', request)
+    return response.data
 }

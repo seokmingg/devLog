@@ -13,7 +13,7 @@ export function PostCardContent({title, contents, kind, hashtags}: PostCardConte
                     <pre className={styles.code} aria-label={`${title} 코드`}>
                         <code>{contents}</code>
                     </pre>
-                ) : (
+                ) : kind === 'diagram' ? (
                     <div className={styles.diagram}>
                         <div>
                             <span>Request</span><b>→</b>
@@ -22,10 +22,12 @@ export function PostCardContent({title, contents, kind, hashtags}: PostCardConte
                             <span>DB</span>
                         </div>
                     </div>
+                ) : (
+                    <div className={styles.textContent}>{contents}</div>
                 )}
 
                 <div className={styles.contentBody}>
-                    {kind !== 'code' && <p>{contents}</p>}
+                    {kind === 'diagram' && <p>{contents}</p>}
                     <p className={styles.hashtags}>{hashtags.map(tag => `#${tag}`).join(' ')}</p>
                 </div>
             </div>

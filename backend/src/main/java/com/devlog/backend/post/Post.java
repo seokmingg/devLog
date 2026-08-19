@@ -1,10 +1,14 @@
 package com.devlog.backend.post;
 
+import com.devlog.backend.member.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +26,10 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -115,6 +123,28 @@ public class Post {
             commentCount,
             isMine
         );
+    }
+
+    public static Post createByMember(Member member, String title, String contents, String kind) {
+        String nickname = member.getNickname();
+        String initials = nickname.substring(0, Math.min(2, nickname.length())).toUpperCase();
+
+        Post post = new Post(
+            title,
+            contents,
+            initials,
+            nickname,
+            "blue",
+            LocalDateTime.now(),
+            kind,
+            0,
+            false,
+            List.of(),
+            0,
+            false
+        );
+        post.member = member;
+        return post;
     }
 
     public List<String> getHashtagList() {

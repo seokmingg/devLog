@@ -10,4 +10,5 @@ public class AuthorResponse {
     private final String initials;
     private final String name;
     private final String tone;
+    private final String profileImageUrl;
 }

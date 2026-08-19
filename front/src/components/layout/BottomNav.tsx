@@ -6,6 +6,8 @@ export function BottomNav() {
     {[['⌂', '홈'], ['⌕', '검색'], ['＋', '글쓰기'], ['#', '기술'], ['○', '프로필']].map(([icon, label], index) =>
       label === '프로필'
         ? <Link key={label} to="/mypage"><span>{icon}</span><small>{label}</small></Link>
+        : label === '글쓰기'
+        ? <Link key={label} className={styles.create} to="/posts/new"><span>{icon}</span><small>{label}</small></Link>
         : <a key={label} className={`${index === 0 ? styles.active : ''} ${index === 2 ? styles.create : ''}`} href={index === 0 ? '/' : `#${label}`}><span>{icon}</span><small>{label}</small></a>)}
   </nav>
 }

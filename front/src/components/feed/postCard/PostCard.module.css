@@ -137,6 +137,14 @@
     text-align: center;
 }
 
+.textContent {
+    padding: 8px 20px 22px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 15px;
+    line-height: 1.75;
+}
+
 .actions {
     display: flex;
     justify-content: space-between;

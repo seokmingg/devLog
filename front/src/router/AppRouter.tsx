@@ -7,6 +7,7 @@ import {Signup} from "../pages/Signup/Signup.tsx";
 import {ProtectedRoute} from './ProtectedRoute.tsx'
 import {GuestRoute} from './GuestRoute.tsx'
 import {MyPage} from '../pages/MyPage/MyPage.tsx'
+import {PostWrite} from '../pages/PostWrite/PostWrite.tsx'
 
 export function AppRouter() {
   return (
@@ -16,6 +17,7 @@ export function AppRouter() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<Main />} />
             <Route path="/mypage" element={<MyPage/>}/>
+            <Route path="/posts/new" element={<PostWrite/>}/>
           </Route>
         </Route>
         <Route element={<GuestRoute/>}>

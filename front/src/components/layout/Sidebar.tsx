@@ -9,7 +9,9 @@ export function Sidebar() {
       <Link className={styles.brand} to="/" aria-label="DevLog 메인"><span>&lt;/&gt;</span>DevLog</Link>
       <nav className={styles.nav} aria-label="주 메뉴">
         {navItems.map(([icon, label], index) => (
-          label === '내 프로필' ? <Link key={label} className={styles.item} to="/mypage"><span className={styles.icon}>{icon}</span><span>{label}</span></Link> : <a key={label} className={`${styles.item} ${index === 0 ? styles.active : ''}`} href={index === 0 ? '/' : `#${label}`}>
+          label === '내 프로필' ? <Link key={label} className={styles.item} to="/mypage"><span className={styles.icon}>{icon}</span><span>{label}</span></Link>
+          : label === '글쓰기' ? <Link key={label} className={styles.item} to="/posts/new"><span className={styles.icon}>{icon}</span><span>{label}</span></Link>
+          : <a key={label} className={`${styles.item} ${index === 0 ? styles.active : ''}`} href={index === 0 ? '/' : `#${label}`}>
             <span className={styles.icon}>{icon}</span><span>{label}</span>
           </a>
         ))}
