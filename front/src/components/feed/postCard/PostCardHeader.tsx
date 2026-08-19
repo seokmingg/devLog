@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react'
 import type {Post} from '../../../types/feed.ts'
 import {Avatar} from '../../common/Avatar.tsx'
 import {deletePost} from '../../../api/feed/postCard/posts.ts'
+import {useNavigate} from 'react-router-dom'
 import styles from './PostCard.module.css'
 
 interface PostCardHeaderProps extends Pick<Post, 'author' | 'createdAt'> {
@@ -11,6 +12,7 @@ interface PostCardHeaderProps extends Pick<Post, 'author' | 'createdAt'> {
 }
 
 export function PostCardHeader({postId, author, createdAt, isMine, onDelete}: PostCardHeaderProps) {
+    const navigate = useNavigate()
     const [menuOpen, setMenuOpen] = useState(false)
     const [menuMessage, setMenuMessage] = useState<string | null>(null)
     const [deleting, setDeleting] = useState(false)
@@ -100,7 +102,7 @@ export function PostCardHeader({postId, author, createdAt, isMine, onDelete}: Po
                                 <button
                                     type="button"
                                     role="menuitem"
-                                    onClick={() => showPreparingMessage('게시글 수정 기능을 준비 중입니다.')}
+                                    onClick={() => navigate(`/posts/${postId}/edit`)}
                                 >
                                     수정
                                 </button>

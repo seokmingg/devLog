@@ -147,6 +147,12 @@ public class Post {
         return post;
     }
 
+    public void update(String title, String contents, String kind) {
+        this.title = title;
+        this.contents = contents;
+        this.kind = kind;
+    }
+
     public List<String> getHashtagList() {
         if (hashtags.isBlank()) {
             return List.of();

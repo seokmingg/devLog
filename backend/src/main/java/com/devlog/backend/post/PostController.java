@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +55,15 @@ public class PostController {
         @Valid @RequestBody CreatePostRequest request
     ) {
         return postService.createPost(Long.valueOf(jwt.getSubject()), request);
+    }
+
+    @PutMapping("/{postId}")
+    public PostResponse updatePost(
+        @AuthenticationPrincipal Jwt jwt,
+        @PathVariable Long postId,
+        @Valid @RequestBody CreatePostRequest request
+    ) {
+        return postService.updatePost(Long.valueOf(jwt.getSubject()), postId, request);
     }
 
     @DeleteMapping("/{postId}")

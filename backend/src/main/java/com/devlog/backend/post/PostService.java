@@ -120,17 +120,51 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long memberId, Long postId) {
-        Post post = postRepository.findById(postId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
-
-        if (post.getMember() == null || !post.getMember().getId().equals(memberId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인이 작성한 게시글만 삭제할 수 있습니다.");
+    public PostResponse updatePost(Long memberId, Long postId, CreatePostRequest request) {
+        if (new HashSet<>(request.getTagIds()).size() != request.getTagIds().size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "같은 기술 태그를 중복 선택할 수 없습니다.");
         }
+
+        Post post = findOwnedPost(memberId, postId);
+        List<TechnologyTag> tags = request.getTagIds().stream()
+            .map(tagId -> technologyTagRepository.findById(tagId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 기술 태그입니다.")))
+            .toList();
+
+        post.update(
+            request.getTitle().trim(),
+            request.getContents().trim(),
+            request.getKind()
+        );
+        postTagRepository.deleteAllByPostId(postId);
+        postTagRepository.flush();
+        tags.forEach(tag -> postTagRepository.save(PostTag.create(post, tag)));
+
+        return PostResponse.from(
+            post,
+            memberId,
+            tags.stream().map(TechnologyTag::getName).toList(),
+            commentRepository.countByPostId(postId)
+        );
+    }
+
+    @Transactional
+    public void deletePost(Long memberId, Long postId) {
+        Post post = findOwnedPost(memberId, postId);
 
         commentRepository.deleteAllByPostId(postId);
         postTagRepository.deleteAllByPostId(postId);
         postRepository.delete(post);
+    }
+
+    private Post findOwnedPost(Long memberId, Long postId) {
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
+
+        if (post.getMember() == null || !post.getMember().getId().equals(memberId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인이 작성한 게시글만 변경할 수 있습니다.");
+        }
+        return post;
     }
 
     private PostResponse toResponse(Post post, Long currentMemberId) {

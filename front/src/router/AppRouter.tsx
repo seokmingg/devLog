@@ -18,6 +18,7 @@ export function AppRouter() {
             <Route path="/" element={<Main />} />
             <Route path="/mypage" element={<MyPage/>}/>
             <Route path="/posts/new" element={<PostWrite/>}/>
+            <Route path="/posts/:postId/edit" element={<PostWrite/>}/>
           </Route>
         </Route>
         <Route element={<GuestRoute/>}>

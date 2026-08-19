@@ -1,12 +1,14 @@
 import {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {createPost} from '../../api/feed/postCard/posts.ts'
+import {useNavigate, useParams} from 'react-router-dom'
+import {createPost, getPost, updatePost} from '../../api/feed/postCard/posts.ts'
 import {getTechnologyTags} from '../../api/tag.ts'
 import type {TechnologyTagDto} from '../../types/tag.ts'
 import styles from './PostWrite.module.css'
 
 export function PostWrite() {
     const navigate = useNavigate()
+    const {postId} = useParams()
+    const editing = postId !== undefined
     const [title, setTitle] = useState('')
     const [contents, setContents] = useState('')
     const [kind, setKind] = useState<'text' | 'code'>('text')
@@ -18,12 +20,31 @@ export function PostWrite() {
 
     useEffect(() => {
         let active = true
-        getTechnologyTags()
-            .then(response => {
-                if (active) setTags(response)
+        Promise.all([
+            getTechnologyTags(),
+            editing ? getPost(Number(postId)) : Promise.resolve(null),
+        ])
+            .then(([tagResponse, postResponse]) => {
+                if (!active) return
+                setTags(tagResponse)
+
+                if (postResponse) {
+                    if (!postResponse.isMine) {
+                        throw new Error('not-owner')
+                    }
+                    setTitle(postResponse.title)
+                    setContents(postResponse.contents)
+                    setKind(postResponse.kind === 'code' ? 'code' : 'text')
+                    const hashtagNames = new Set(postResponse.hashtags.map(tag => tag.toLowerCase()))
+                    setSelectedTagIds(tagResponse
+                        .filter(tag => hashtagNames.has(tag.name.toLowerCase()))
+                        .map(tag => tag.id))
+                }
             })
             .catch(() => {
-                if (active) setError('기술 태그를 불러오지 못했습니다.')
+                if (active) setError(editing
+                    ? '수정할 게시글을 불러오지 못했거나 수정 권한이 없습니다.'
+                    : '기술 태그를 불러오지 못했습니다.')
             })
             .finally(() => {
                 if (active) setLoadingTags(false)
@@ -32,7 +53,7 @@ export function PostWrite() {
         return () => {
             active = false
         }
-    }, [])
+    }, [editing, postId])
 
     const toggleTag = (tagId: number) => {
         setError(null)
@@ -62,15 +83,22 @@ export function PostWrite() {
         setSubmitting(true)
         setError(null)
         try {
-            await createPost({
+            const request = {
                 title: trimmedTitle,
                 contents: trimmedContents,
                 kind,
                 tagIds: selectedTagIds,
-            })
+            }
+            if (editing) {
+                await updatePost(Number(postId), request)
+            } else {
+                await createPost(request)
+            }
             navigate('/', {replace: true})
         } catch {
-            setError('게시글을 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.')
+            setError(editing
+                ? '게시글을 수정하지 못했습니다. 잠시 후 다시 시도해 주세요.'
+                : '게시글을 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.')
             setSubmitting(false)
         }
     }
@@ -80,8 +108,8 @@ export function PostWrite() {
             <section className={styles.editor} aria-labelledby="post-write-title">
                 <div className={styles.heading}>
                     <div>
-                        <h1 id="post-write-title">새 글 작성</h1>
-                        <p>오늘 배운 내용과 개발 경험을 기록해 보세요.</p>
+                        <h1 id="post-write-title">{editing ? '게시글 수정' : '새 글 작성'}</h1>
+                        <p>{editing ? '작성한 게시글의 내용을 수정합니다.' : '오늘 배운 내용과 개발 경험을 기록해 보세요.'}</p>
                     </div>
                     <button type="button" onClick={() => navigate(-1)}>취소</button>
                 </div>
@@ -165,7 +193,7 @@ export function PostWrite() {
                 <div className={styles.actions}>
                     <button type="button" onClick={() => navigate(-1)}>취소</button>
                     <button type="button" className={styles.submit} disabled={submitting} onClick={handleSubmit}>
-                        {submitting ? '등록 중...' : '게시하기'}
+                        {submitting ? (editing ? '수정 중...' : '등록 중...') : (editing ? '수정 완료' : '게시하기')}
                     </button>
                 </div>
             </section>

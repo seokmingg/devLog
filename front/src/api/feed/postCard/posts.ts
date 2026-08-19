@@ -39,3 +39,11 @@ export async function createPost(request: CreatePostRequestDto): Promise<PostRes
 export async function deletePost(postId: number): Promise<void> {
     await apiClient.delete(`/posts/${postId}`)
 }
+
+export async function updatePost(
+    postId: number,
+    request: CreatePostRequestDto,
+): Promise<PostResponseDto> {
+    const response = await apiClient.put<PostResponseDto>(`/posts/${postId}`, request)
+    return response.data
+}
