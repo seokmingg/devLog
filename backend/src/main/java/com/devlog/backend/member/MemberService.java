@@ -6,6 +6,7 @@ import com.devlog.backend.member.dto.MyPageResponse;
 import com.devlog.backend.member.dto.UpdateProfileRequest;
 import com.devlog.backend.member.interest.MemberInterestRepository;
 import com.devlog.backend.member.interest.MemberInterestService;
+import com.devlog.backend.like.PostLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class MemberService {
     private final OAuthAccountRepository oauthAccountRepository;
     private final MemberInterestRepository memberInterestRepository;
     private final MemberInterestService memberInterestService;
+    private final PostLikeRepository postLikeRepository;
 
     public MyPageResponse getMyPage(Long memberId) {
         Member member = findMember(memberId);
@@ -47,6 +49,7 @@ public class MemberService {
         localCredentialRepository.deleteAllByMemberId(memberId);
         oauthAccountRepository.deleteAllByMemberId(memberId);
         memberInterestRepository.deleteAllByMemberId(memberId);
+        postLikeRepository.deleteAllByMemberId(memberId);
         member.withdraw();
     }
 

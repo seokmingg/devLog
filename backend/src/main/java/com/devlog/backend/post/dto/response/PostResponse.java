@@ -29,7 +29,9 @@ public class PostResponse {
         Post post,
         Long currentMemberId,
         List<String> tags,
-        long commentCount
+        long commentCount,
+        long likeCount,
+        boolean likedByMe
     ) {
         boolean linkedMember = post.getMember() != null;
         return new PostResponse(
@@ -44,8 +46,8 @@ public class PostResponse {
             ),
             post.getCreatedAt(),
             post.getKind(),
-            post.getLikes(),
-            post.isLikedByMe(),
+            likeCount,
+            likedByMe,
             tags,
             commentCount,
             linkedMember

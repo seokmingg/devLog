@@ -10,6 +10,7 @@ import com.devlog.backend.post.tag.PostTagRepository;
 import com.devlog.backend.tag.TechnologyTag;
 import com.devlog.backend.tag.TechnologyTagRepository;
 import com.devlog.backend.comment.CommentRepository;
+import com.devlog.backend.like.PostLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,7 @@ public class PostService {
     private final TechnologyTagRepository technologyTagRepository;
     private final PostTagRepository postTagRepository;
     private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
 
     public PostCursorResponse getPosts(
         Long currentMemberId,
@@ -115,7 +117,9 @@ public class PostService {
             post,
             memberId,
             tags.stream().map(TechnologyTag::getName).toList(),
-            0
+            0,
+            0,
+            false
         );
     }
 
@@ -144,7 +148,9 @@ public class PostService {
             post,
             memberId,
             tags.stream().map(TechnologyTag::getName).toList(),
-            commentRepository.countByPostId(postId)
+            commentRepository.countByPostId(postId),
+            postLikeRepository.countByPostId(postId),
+            postLikeRepository.existsByPostIdAndMemberId(postId, memberId)
         );
     }
 
@@ -154,6 +160,7 @@ public class PostService {
 
         commentRepository.deleteAllByPostId(postId);
         postTagRepository.deleteAllByPostId(postId);
+        postLikeRepository.deleteAllByPostId(postId);
         postRepository.delete(post);
     }
 
@@ -179,7 +186,9 @@ public class PostService {
             post,
             currentMemberId,
             tags,
-            commentRepository.countByPostId(post.getId())
+            commentRepository.countByPostId(post.getId()),
+            postLikeRepository.countByPostId(post.getId()),
+            postLikeRepository.existsByPostIdAndMemberId(post.getId(), currentMemberId)
         );
     }
 }
