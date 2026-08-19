@@ -4,17 +4,23 @@ import { Login } from '../pages/Login/Login'
 import { Main } from '../pages/Main/Main'
 import {OAuthCallback} from '../pages/OAuthCallback/OAuthCallback.tsx'
 import {Signup} from "../pages/Signup/Signup.tsx";
+import {ProtectedRoute} from './ProtectedRoute.tsx'
+import {GuestRoute} from './GuestRoute.tsx'
 
 export function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Main />} />
+        <Route element={<ProtectedRoute/>}>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Main />} />
+          </Route>
         </Route>
-        <Route path="/login" element={<Login />} />
+        <Route element={<GuestRoute/>}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup/>}/>
+        </Route>
         <Route path="/oauth/callback" element={<OAuthCallback />} />
-        <Route path={"/signup"} element={<Signup/>}/>
       </Routes>
     </BrowserRouter>
   )

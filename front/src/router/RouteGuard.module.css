@@ -1,0 +1,26 @@
+.page {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 12px;
+    min-height: 100vh;
+    color: var(--color-muted);
+    background: var(--color-background);
+}
+
+.page p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.spinner {
+    color: var(--color-primary);
+    font-size: 42px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

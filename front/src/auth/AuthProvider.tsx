@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState, type ReactNode} from 'react'
-import {logout as requestLogout, restoreAuthSession} from '../api/auth.ts'
+import {login as requestLogin, logout as requestLogout, restoreAuthSession} from '../api/auth.ts'
 import {setAccessToken as applyAccessToken} from '../api/client.ts'
 import type {AuthMemberDto} from '../types/auth.ts'
 import {AuthContext} from './authContext.ts'
@@ -8,6 +8,12 @@ export function AuthProvider({children}: { children: ReactNode }) {
     const [member, setMember] = useState<AuthMemberDto | null>(null)
     const [accessToken, setAccessToken] = useState<string | null>(null)
     const [authLoading, setAuthLoading] = useState(true)
+
+    const login = useCallback(async (email: string, password: string) => {
+        const authenticated = await requestLogin({email, password})
+        setAccessToken(authenticated.token.accessToken)
+        setMember(authenticated.member)
+    }, [])
 
     const restoreSession = useCallback(async () => {
         setAuthLoading(true)
@@ -64,6 +70,7 @@ export function AuthProvider({children}: { children: ReactNode }) {
             member,
             accessToken,
             authLoading,
+            login,
             restoreSession,
             logout,
         }}>

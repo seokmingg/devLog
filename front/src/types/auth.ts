@@ -16,3 +16,8 @@ export interface SignupRequestDto {
     password: string
     nickname: string
 }
+
+export interface LoginRequestDto {
+    email: string
+    password: string
+}

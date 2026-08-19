@@ -5,6 +5,7 @@ export interface AuthContextValue {
     member: AuthMemberDto | null
     accessToken: string | null
     authLoading: boolean
+    login: (email: string, password: string) => Promise<void>
     restoreSession: () => Promise<boolean>
     logout: () => Promise<void>
 }

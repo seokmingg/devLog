@@ -15,6 +15,8 @@
 .options a { color: var(--color-primary); }
 .form > button { height: 50px; border: 0; border-radius: 10px; color: white; background: var(--color-primary); font-weight: 700; cursor: pointer; }
 .form > button:hover { background: #1d4ed8; }
+.form > button:disabled { cursor: not-allowed; opacity: 0.65; }
+.error { margin: -4px 0 0; color: #dc2626; font-size: 13px; line-height: 1.5; }
 .divider { display: flex; align-items: center; gap: 14px; margin: 24px 0; color: var(--color-muted); font-size: 13px; }
 .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--color-line); }
 .googleButton { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; height: 50px; border: 1px solid #d1d5db; border-radius: 10px; background: white; font-weight: 700; cursor: pointer; }
