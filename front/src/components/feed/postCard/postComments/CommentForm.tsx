@@ -1,5 +1,6 @@
 import {useState, type FormEvent} from 'react'
 import {createPostComment} from '../../../../api/feed/postCard/comments.ts'
+import {useAuth} from '../../../../auth/useAuth.ts'
 import {Avatar} from '../../../common/Avatar.tsx'
 import styles from '../PostCard.module.css'
 
@@ -9,6 +10,7 @@ interface CommentFormProps {
 }
 
 export function CommentForm({postId, onCommentCreated}: CommentFormProps) {
+    const {member} = useAuth()
     const [contents, setContents] = useState('')
     const [submitting, setSubmitting] = useState(false)
     const [submitError, setSubmitError] = useState<string | null>(null)
@@ -36,7 +38,12 @@ export function CommentForm({postId, onCommentCreated}: CommentFormProps) {
     return (
         <>
             <form className={styles.comment} onSubmit={submitComment}>
-                <Avatar initials="SM" size="tiny"/>
+                <Avatar
+                    nickname={member?.nickname}
+                    imageUrl={member?.profileImageUrl}
+                    alt={member ? `${member.nickname} 프로필` : '내 프로필'}
+                    size="tiny"
+                />
                 <input
                     type="text"
                     value={contents}

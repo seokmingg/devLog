@@ -6,6 +6,7 @@ import {OAuthCallback} from '../pages/OAuthCallback/OAuthCallback.tsx'
 import {Signup} from "../pages/Signup/Signup.tsx";
 import {ProtectedRoute} from './ProtectedRoute.tsx'
 import {GuestRoute} from './GuestRoute.tsx'
+import {MyPage} from '../pages/MyPage/MyPage.tsx'
 
 export function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export function AppRouter() {
         <Route element={<ProtectedRoute/>}>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Main />} />
+            <Route path="/mypage" element={<MyPage/>}/>
           </Route>
         </Route>
         <Route element={<GuestRoute/>}>

@@ -2,6 +2,7 @@ import {useCallback, useEffect, useState, type ReactNode} from 'react'
 import {login as requestLogin, logout as requestLogout, restoreAuthSession} from '../api/auth.ts'
 import {setAccessToken as applyAccessToken} from '../api/client.ts'
 import type {AuthMemberDto} from '../types/auth.ts'
+import {withdrawMyAccount} from '../api/member.ts'
 import {AuthContext} from './authContext.ts'
 
 export function AuthProvider({children}: { children: ReactNode }) {
@@ -13,6 +14,17 @@ export function AuthProvider({children}: { children: ReactNode }) {
         const authenticated = await requestLogin({email, password})
         setAccessToken(authenticated.token.accessToken)
         setMember(authenticated.member)
+    }, [])
+
+    const updateMember = useCallback((updatedMember: AuthMemberDto) => {
+        setMember(updatedMember)
+    }, [])
+
+    const withdraw = useCallback(async () => {
+        await withdrawMyAccount()
+        applyAccessToken(null)
+        setAccessToken(null)
+        setMember(null)
     }, [])
 
     const restoreSession = useCallback(async () => {
@@ -71,6 +83,8 @@ export function AuthProvider({children}: { children: ReactNode }) {
             accessToken,
             authLoading,
             login,
+            updateMember,
+            withdraw,
             restoreSession,
             logout,
         }}>
