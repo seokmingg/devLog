@@ -1,6 +1,8 @@
 .strip { display: flex; align-items: flex-start; gap: 22px; overflow-x: auto; padding: 4px 4px 20px; scrollbar-width: none; }
 .strip::-webkit-scrollbar { display: none; }
 .chip { display: grid; justify-items: center; gap: 8px; min-width: 72px; font-size: 12px; }
+.chip.active { color: var(--color-primary); font-weight: 800; }
+.chip.active .circle { outline: 3px solid rgb(37 99 235 / 16%); outline-offset: 3px; }
 .circle { display: grid; place-items: center; width: 72px; height: 72px; border: 2px solid #cbd5e1; border-radius: 50%; background: white; font-weight: 800; }
 .green { color: #16a34a; border-color: #22c55e; }
 .sky { color: #0284c7; border-color: #0ea5e9; font-size: 28px; }

@@ -30,12 +30,42 @@ public class PostService {
     private final TechnologyTagRepository technologyTagRepository;
     private final PostTagRepository postTagRepository;
 
-    public PostCursorResponse getPosts(Long currentMemberId, Long cursor, int size) {
+    public PostCursorResponse getPosts(
+        Long currentMemberId,
+        Long cursor,
+        int size,
+        String tag,
+        String query
+    ) {
         Pageable pageable = PageRequest.of(0, size + 1);
 
-        List<Post> posts = cursor == null
-            ? postRepository.findAllByOrderByIdDesc(pageable)
-            : postRepository.findByIdLessThanOrderByIdDesc(cursor, pageable);
+        String tagSlug = tag == null ? null : tag.trim().toLowerCase();
+        String keyword = query == null ? null : query.trim();
+        boolean hasTag = tagSlug != null && !tagSlug.isBlank();
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+        List<Post> posts;
+        if (!hasTag && !hasKeyword) {
+            posts = cursor == null
+                ? postRepository.findAllByOrderByIdDesc(pageable)
+                : postRepository.findByIdLessThanOrderByIdDesc(cursor, pageable);
+        } else if (hasTag && !hasKeyword) {
+            posts = cursor == null
+                ? postRepository.findAllByTagSlugOrderByIdDesc(tagSlug, pageable)
+                : postRepository.findByTagSlugAndIdLessThanOrderByIdDesc(tagSlug, cursor, pageable);
+        } else if (!hasTag) {
+            posts = cursor == null
+                ? postRepository.findAllByKeywordOrderByIdDesc(keyword, pageable)
+                : postRepository.findByKeywordAndIdLessThanOrderByIdDesc(keyword, cursor, pageable);
+        } else {
+            posts = cursor == null
+                ? postRepository.findAllByTagSlugAndKeywordOrderByIdDesc(tagSlug, keyword, pageable)
+                : postRepository.findByTagSlugAndKeywordAndIdLessThanOrderByIdDesc(
+                    tagSlug,
+                    keyword,
+                    cursor,
+                    pageable
+                );
+        }
 
         boolean hasNext = posts.size() > size;
         List<Post> currentPosts = hasNext ? posts.subList(0, size) : posts;

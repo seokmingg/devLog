@@ -1,6 +1,6 @@
 import { Avatar } from '../../common/Avatar.tsx'
 import {useAuth} from '../../../auth/useAuth.ts'
-import {Link} from 'react-router-dom'
+import {Link, useSearchParams} from 'react-router-dom'
 import styles from './TechStrip.module.css'
 
 const tagStyles: Record<string, {mark: string; color: string}> = {
@@ -18,12 +18,14 @@ const tagStyles: Record<string, {mark: string; color: string}> = {
 
 export function TechStrip() {
   const {member} = useAuth()
+  const [searchParams] = useSearchParams()
+  const selectedTag = searchParams.get('tag')
 
   return <section className={styles.strip} aria-label="기술 태그 바로가기">
     <Link className={styles.chip} to="/mypage"><span className={styles.profile}><Avatar nickname={member?.nickname} imageUrl={member?.profileImageUrl} alt={member ? `${member.nickname} 프로필` : '내 프로필'} size="large" /><i>+</i></span><span>관심 기술</span></Link>
     {member?.interests.map(tag => {
       const visual = tagStyles[tag.slug] ?? {mark: tag.name.slice(0, 2), color: 'green'}
-      return <a className={styles.chip} href={`#${tag.slug}`} key={tag.id}><span className={`${styles.circle} ${styles[visual.color]}`}>{visual.mark}</span><span>{tag.name}</span></a>
+      return <Link className={`${styles.chip} ${selectedTag === tag.slug ? styles.active : ''}`} to={`/?tag=${encodeURIComponent(tag.slug)}`} key={tag.id}><span className={`${styles.circle} ${styles[visual.color]}`}>{visual.mark}</span><span>{tag.name}</span></Link>
     })}
   </section>
 }

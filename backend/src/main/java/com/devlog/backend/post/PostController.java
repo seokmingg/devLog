@@ -6,6 +6,7 @@ import com.devlog.backend.post.dto.request.CreatePostRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +33,11 @@ public class PostController {
     public PostCursorResponse getPosts(
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) Long cursor,
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) @Size(max = 100) String q,
             @RequestParam(defaultValue = "5") @Min(1) @Max(20) int size
     ) {
-        return postService.getPosts(Long.valueOf(jwt.getSubject()), cursor, size);
+        return postService.getPosts(Long.valueOf(jwt.getSubject()), cursor, size, tag, q);
     }
 
     @GetMapping("/{postId}")

@@ -9,10 +9,12 @@ import lombok.Getter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.core.annotation.Order;
 
 import java.util.List;
 
 @Component
+@Order(1)
 @RequiredArgsConstructor
 public class TechnologyTagDataInitializer implements CommandLineRunner {
 

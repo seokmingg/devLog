@@ -11,9 +11,11 @@ export async function getPost(postId: number): Promise<PostResponseDto> {
 export async function getPosts(
     cursor?: number,
     size = DEFAULT_POST_SIZE,
+    tag?: string,
+    query?: string,
 ): Promise<PostCursorResponseDto> {
     const response = await apiClient.get<PostCursorResponseDto>('/posts', {
-        params: {cursor, size},
+        params: {cursor, size, tag, q: query},
     })
 
     const data = response.data
