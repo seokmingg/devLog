@@ -1,6 +1,6 @@
 import type {CommentPageResponseDto, CommentResponseDto} from '../types/feed.ts'
 
-const mockComments: CommentResponseDto[] = [
+const mockComments = ([
     {
         id: 1,
         authorName: 'spring_han',
@@ -91,7 +91,11 @@ const mockComments: CommentResponseDto[] = [
         contents: '다음 게시글도 기다리겠습니다 🙌',
         createdAt: '2026-07-28T06:00:00Z',
     },
-]
+]).map(comment => ({
+    ...comment,
+    authorProfileImageUrl: null,
+    isMine: false,
+})) satisfies CommentResponseDto[]
 
 export async function getMockPostComments(
     _postId: number,

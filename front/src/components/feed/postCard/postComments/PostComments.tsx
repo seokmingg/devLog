@@ -38,7 +38,7 @@ export function PostComments({postId, commentCount, onPostRefresh}: PostComments
             setHasNextComments(!response.last)
             setCommentsLoaded(true)
         } catch {
-            setCommentsError('댓글 기능을 준비 중입니다.')
+            setCommentsError('댓글을 불러오지 못했습니다.')
         } finally {
             setCommentsLoading(false)
         }

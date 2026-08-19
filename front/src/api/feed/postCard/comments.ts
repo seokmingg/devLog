@@ -1,4 +1,4 @@
-import type {CommentPageResponseDto} from '../../../types/feed.ts'
+import type {CommentPageResponseDto, CommentResponseDto} from '../../../types/feed.ts'
 import {apiClient} from '../../client.ts'
 
 export async function getPostComments(
@@ -27,6 +27,7 @@ export async function getPostComments(
 export async function createPostComment(
     postId: number,
     contents: string,
-): Promise<void> {
-    await apiClient.post(`/posts/${postId}/comments`, {contents})
+): Promise<CommentResponseDto> {
+    const response = await apiClient.post<CommentResponseDto>(`/posts/${postId}/comments`, {contents})
+    return response.data
 }

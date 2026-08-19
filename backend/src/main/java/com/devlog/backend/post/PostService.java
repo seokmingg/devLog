@@ -9,6 +9,7 @@ import com.devlog.backend.post.tag.PostTag;
 import com.devlog.backend.post.tag.PostTagRepository;
 import com.devlog.backend.tag.TechnologyTag;
 import com.devlog.backend.tag.TechnologyTagRepository;
+import com.devlog.backend.comment.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final TechnologyTagRepository technologyTagRepository;
     private final PostTagRepository postTagRepository;
+    private final CommentRepository commentRepository;
 
     public PostCursorResponse getPosts(
         Long currentMemberId,
@@ -112,7 +114,8 @@ public class PostService {
         return PostResponse.from(
             post,
             memberId,
-            tags.stream().map(TechnologyTag::getName).toList()
+            tags.stream().map(TechnologyTag::getName).toList(),
+            0
         );
     }
 
@@ -124,6 +127,11 @@ public class PostService {
         if (tags.isEmpty()) {
             tags = post.getHashtagList();
         }
-        return PostResponse.from(post, currentMemberId, tags);
+        return PostResponse.from(
+            post,
+            currentMemberId,
+            tags,
+            commentRepository.countByPostId(post.getId())
+        );
     }
 }

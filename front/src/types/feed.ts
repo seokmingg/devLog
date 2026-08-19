@@ -11,8 +11,10 @@ export interface Person {
 export interface CommentResponseDto {
   id: number
   authorName: string
+  authorProfileImageUrl: string | null
   contents: string
   createdAt: string
+  isMine: boolean
 }
 
 export interface CommentPageResponseDto {

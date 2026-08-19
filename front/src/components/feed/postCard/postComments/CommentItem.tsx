@@ -28,6 +28,9 @@ export function CommentItem({comment}: { comment: CommentResponseDto }) {
         <div className={styles.commentItem}>
             <Avatar
                 initials={comment.authorName.slice(0, 2).toUpperCase()}
+                nickname={comment.authorName}
+                imageUrl={comment.authorProfileImageUrl}
+                alt={`${comment.authorName} 프로필`}
                 size="tiny"
             />
             <div>

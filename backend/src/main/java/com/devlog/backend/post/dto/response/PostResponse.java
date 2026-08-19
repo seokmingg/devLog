@@ -23,7 +23,12 @@ public class PostResponse {
     private final long commentCount;
     private final boolean isMine;
 
-    public static PostResponse from(Post post, Long currentMemberId, List<String> tags) {
+    public static PostResponse from(
+        Post post,
+        Long currentMemberId,
+        List<String> tags,
+        long commentCount
+    ) {
         boolean linkedMember = post.getMember() != null;
         return new PostResponse(
             post.getId(),
@@ -40,7 +45,7 @@ public class PostResponse {
             post.getLikes(),
             post.isLikedByMe(),
             tags,
-            post.getCommentCount(),
+            commentCount,
             linkedMember
                 ? post.getMember().getId().equals(currentMemberId)
                 : post.isMine()
