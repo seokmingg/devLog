@@ -9,6 +9,7 @@ export interface AuthMemberDto {
     email: string
     nickname: string
     profileImageUrl: string | null
+    interests: TechnologyTagDto[]
 }
 
 export interface SignupRequestDto {
@@ -21,3 +22,4 @@ export interface LoginRequestDto {
     email: string
     password: string
 }
+import type {TechnologyTagDto} from './tag.ts'

@@ -2,6 +2,7 @@ package com.devlog.backend.auth.oauth;
 
 import com.devlog.backend.member.Member;
 import com.devlog.backend.member.MemberRepository;
+import com.devlog.backend.member.interest.MemberInterestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
@@ -18,6 +19,7 @@ public class GoogleOAuthMemberService {
 
     private final MemberRepository memberRepository;
     private final OAuthAccountRepository oauthAccountRepository;
+    private final MemberInterestService memberInterestService;
 
     @Transactional
     public Member findOrCreate(
@@ -66,6 +68,7 @@ public class GoogleOAuthMemberService {
             providerUserId,
             email
         ));
+        memberInterestService.assignDefaults(member);
 
         return member;
     }

@@ -9,6 +9,7 @@ import com.devlog.backend.auth.token.RefreshTokenService;
 import com.devlog.backend.auth.token.TokenResponse;
 import com.devlog.backend.member.Member;
 import com.devlog.backend.member.MemberRepository;
+import com.devlog.backend.member.interest.MemberInterestService;
 import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +33,13 @@ public class AuthController {
     private final LocalLoginService localLoginService;
     private final RefreshTokenService refreshTokenService;
     private final MemberRepository memberRepository;
+    private final MemberInterestService memberInterestService;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberResponse signup(@Valid @RequestBody SignupRequest request) {
-        return MemberResponse.from(localSignupService.signup(request));
+        Member member = localSignupService.signup(request);
+        return MemberResponse.from(member, memberInterestService.getInterests(member.getId()));
     }
 
     @PostMapping("/login")
@@ -73,6 +76,6 @@ public class AuthController {
                 HttpStatus.UNAUTHORIZED,
                 "로그인 회원을 찾을 수 없습니다."
             ));
-        return MemberResponse.from(member);
+        return MemberResponse.from(member, memberInterestService.getInterests(member.getId()));
     }
 }

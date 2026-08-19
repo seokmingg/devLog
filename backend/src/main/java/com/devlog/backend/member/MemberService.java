@@ -4,6 +4,8 @@ import com.devlog.backend.auth.local.LocalCredentialRepository;
 import com.devlog.backend.auth.oauth.OAuthAccountRepository;
 import com.devlog.backend.member.dto.MyPageResponse;
 import com.devlog.backend.member.dto.UpdateProfileRequest;
+import com.devlog.backend.member.interest.MemberInterestRepository;
+import com.devlog.backend.member.interest.MemberInterestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final LocalCredentialRepository localCredentialRepository;
     private final OAuthAccountRepository oauthAccountRepository;
+    private final MemberInterestRepository memberInterestRepository;
+    private final MemberInterestService memberInterestService;
 
     public MyPageResponse getMyPage(Long memberId) {
         Member member = findMember(memberId);
@@ -42,6 +46,7 @@ public class MemberService {
 
         localCredentialRepository.deleteAllByMemberId(memberId);
         oauthAccountRepository.deleteAllByMemberId(memberId);
+        memberInterestRepository.deleteAllByMemberId(memberId);
         member.withdraw();
     }
 
@@ -57,7 +62,11 @@ public class MemberService {
             .distinct()
             .forEach(loginMethods::add);
 
-        return MyPageResponse.from(member, List.copyOf(loginMethods));
+        return MyPageResponse.from(
+            member,
+            List.copyOf(loginMethods),
+            memberInterestService.getInterests(memberId)
+        );
     }
 
     private Member findMember(Long memberId) {

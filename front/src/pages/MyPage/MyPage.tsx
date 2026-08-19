@@ -1,9 +1,11 @@
 import {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {getMyPage, updateMyProfile} from '../../api/member.ts'
+import {getMyPage, updateMyInterests, updateMyProfile} from '../../api/member.ts'
+import {getTechnologyTags} from '../../api/tag.ts'
 import {useAuth} from '../../auth/useAuth.ts'
 import {Avatar} from '../../components/common/Avatar.tsx'
 import type {MyPageResponseDto} from '../../types/member.ts'
+import type {TechnologyTagDto} from '../../types/tag.ts'
 import styles from './MyPage.module.css'
 
 const loginMethodLabels: Record<MyPageResponseDto['loginMethods'][number], string> = {
@@ -27,6 +29,10 @@ export function MyPage() {
     const [editing, setEditing] = useState(false)
     const [nickname, setNickname] = useState('')
     const [saving, setSaving] = useState(false)
+    const [allTags, setAllTags] = useState<TechnologyTagDto[]>([])
+    const [selectedTagIds, setSelectedTagIds] = useState<number[]>([])
+    const [editingInterests, setEditingInterests] = useState(false)
+    const [savingInterests, setSavingInterests] = useState(false)
     const [withdrawing, setWithdrawing] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [message, setMessage] = useState<string | null>(null)
@@ -34,11 +40,13 @@ export function MyPage() {
     useEffect(() => {
         let active = true
 
-        getMyPage()
-            .then(response => {
+        Promise.all([getMyPage(), getTechnologyTags()])
+            .then(([response, tags]) => {
                 if (!active) return
                 setProfile(response)
                 setNickname(response.nickname)
+                setSelectedTagIds(response.interests.map(tag => tag.id))
+                setAllTags(tags)
             })
             .catch(() => {
                 if (active) setError('내 정보를 불러오지 못했습니다.')
@@ -99,6 +107,7 @@ export function MyPage() {
                 email: updated.email,
                 nickname: updated.nickname,
                 profileImageUrl: updated.profileImageUrl,
+                interests: updated.interests,
             })
             setEditing(false)
             setMessage('프로필이 수정되었습니다.')
@@ -106,6 +115,52 @@ export function MyPage() {
             setError('프로필을 수정하지 못했습니다. 잠시 후 다시 시도해 주세요.')
         } finally {
             setSaving(false)
+        }
+    }
+
+    const toggleInterest = (tagId: number) => {
+        setError(null)
+        setSelectedTagIds(current => {
+            if (current.includes(tagId)) {
+                return current.filter(id => id !== tagId)
+            }
+            if (current.length >= 5) {
+                setError('관심 기술은 최대 5개까지 선택할 수 있습니다.')
+                return current
+            }
+            return [...current, tagId]
+        })
+    }
+
+    const cancelInterestEditing = () => {
+        if (profile) setSelectedTagIds(profile.interests.map(tag => tag.id))
+        setError(null)
+        setEditingInterests(false)
+    }
+
+    const saveInterests = async () => {
+        if (!profile || savingInterests) return
+        setSavingInterests(true)
+        setError(null)
+        setMessage(null)
+
+        try {
+            const interests = await updateMyInterests({tagIds: selectedTagIds})
+            const updated = {...profile, interests}
+            setProfile(updated)
+            updateMember({
+                id: updated.id,
+                email: updated.email,
+                nickname: updated.nickname,
+                profileImageUrl: updated.profileImageUrl,
+                interests,
+            })
+            setEditingInterests(false)
+            setMessage('관심 기술이 수정되었습니다.')
+        } catch {
+            setError('관심 기술을 수정하지 못했습니다. 잠시 후 다시 시도해 주세요.')
+        } finally {
+            setSavingInterests(false)
         }
     }
 
@@ -134,7 +189,7 @@ export function MyPage() {
         return <main className={styles.state}>내 정보를 불러오는 중...</main>
     }
 
-    if (error || !profile) {
+    if (!profile) {
         return <main className={styles.state}>{error ?? '내 정보를 찾을 수 없습니다.'}</main>
     }
 
@@ -196,6 +251,58 @@ export function MyPage() {
                         <dd>{statusLabels[profile.status]}</dd>
                     </div>
                 </dl>
+
+                <section className={styles.interests} aria-labelledby="interests-title">
+                    <div className={styles.sectionHeading}>
+                        <div>
+                            <h2 id="interests-title">관심 기술</h2>
+                            <p>최대 5개까지 선택할 수 있습니다.</p>
+                        </div>
+                        <span>{selectedTagIds.length}/5</span>
+                    </div>
+
+                    {editingInterests ? (
+                        <div className={styles.tagPicker}>
+                            {allTags.map(tag => {
+                                const selected = selectedTagIds.includes(tag.id)
+                                return (
+                                    <button
+                                        type="button"
+                                        className={selected ? styles.selectedTag : undefined}
+                                        aria-pressed={selected}
+                                        onClick={() => toggleInterest(tag.id)}
+                                        key={tag.id}
+                                    >
+                                        {tag.name}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    ) : (
+                        <div className={styles.selectedTags}>
+                            {profile.interests.length > 0
+                                ? profile.interests.map(tag => <span key={tag.id}>{tag.name}</span>)
+                                : <p>선택한 관심 기술이 없습니다.</p>}
+                        </div>
+                    )}
+
+                    <div className={styles.interestActions}>
+                        {editingInterests ? (
+                            <>
+                                <button type="button" disabled={savingInterests} onClick={cancelInterestEditing}>취소</button>
+                                <button type="button" className={styles.saveButton} disabled={savingInterests} onClick={saveInterests}>
+                                    {savingInterests ? '저장 중...' : '저장'}
+                                </button>
+                            </>
+                        ) : (
+                            <button type="button" onClick={() => {
+                                setError(null)
+                                setMessage(null)
+                                setEditingInterests(true)
+                            }}>관심 기술 편집</button>
+                        )}
+                    </div>
+                </section>
 
                 <div className={styles.actions}>
                     {editing ? (

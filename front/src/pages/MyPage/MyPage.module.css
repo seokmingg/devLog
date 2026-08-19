@@ -13,6 +13,20 @@
 .details div { display: grid; grid-template-columns: 120px 1fr; gap: 18px; padding: 15px 4px; border-bottom: 1px solid #f1f5f9; }
 .details dt { color: var(--color-muted); font-size: 14px; }
 .details dd { margin: 0; font-size: 14px; font-weight: 700; }
+.interests { margin: 0 0 28px; padding: 22px; border: 1px solid var(--color-line); border-radius: 12px; background: #f8fafc; }
+.sectionHeading { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.sectionHeading h2 { margin: 0 0 5px; font-size: 17px; }
+.sectionHeading p { margin: 0; color: var(--color-muted); font-size: 13px; }
+.sectionHeading > span { color: var(--color-primary); font-size: 13px; font-weight: 800; }
+.selectedTags, .tagPicker { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+.selectedTags span { padding: 8px 12px; border-radius: 999px; color: #166534; background: #dcfce7; font-size: 13px; font-weight: 700; }
+.selectedTags p { margin: 0; color: var(--color-muted); font-size: 13px; }
+.tagPicker button { min-height: 36px; padding: 0 13px; border: 1px solid #cbd5e1; border-radius: 999px; color: #475569; background: white; font-weight: 700; cursor: pointer; }
+.tagPicker .selectedTag { border-color: var(--color-primary); color: white; background: var(--color-primary); }
+.interestActions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.interestActions button { min-height: 40px; padding: 0 15px; border: 1px solid var(--color-line); border-radius: 9px; background: white; font-weight: 700; cursor: pointer; }
+.interestActions button:disabled { cursor: not-allowed; opacity: 0.5; }
+.interestActions .saveButton { border-color: var(--color-primary); color: white; background: var(--color-primary); }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .actions button { min-height: 48px; border: 1px solid var(--color-line); border-radius: 10px; background: white; font-weight: 700; cursor: pointer; }
 .actions button:disabled { cursor: not-allowed; opacity: 0.5; }

@@ -3,6 +3,7 @@ package com.devlog.backend.auth.local;
 import com.devlog.backend.auth.dto.SignupRequest;
 import com.devlog.backend.member.Member;
 import com.devlog.backend.member.MemberRepository;
+import com.devlog.backend.member.interest.MemberInterestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ public class LocalSignupService {
     private final MemberRepository memberRepository;
     private final LocalCredentialRepository localCredentialRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MemberInterestService memberInterestService;
 
     @Transactional
     public Member signup(SignupRequest request) {
@@ -41,6 +43,7 @@ public class LocalSignupService {
             member,
             passwordEncoder.encode(request.getPassword())
         ));
+        memberInterestService.assignDefaults(member);
 
         return member;
     }
