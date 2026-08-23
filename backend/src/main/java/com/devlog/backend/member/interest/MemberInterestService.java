@@ -6,6 +6,7 @@ import com.devlog.backend.tag.TechnologyTag;
 import com.devlog.backend.tag.TechnologyTagRepository;
 import com.devlog.backend.tag.dto.TechnologyTagResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class MemberInterestService {
 
@@ -66,6 +68,8 @@ public class MemberInterestService {
         memberInterestRepository.deleteAllByMemberId(memberId);
         memberInterestRepository.flush();
         saveInterests(member, tags);
+
+        log.info("Member interests replaced memberId={} count={}", memberId, tags.size());
 
         return getInterests(memberId);
     }

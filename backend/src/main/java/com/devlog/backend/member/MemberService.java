@@ -8,6 +8,7 @@ import com.devlog.backend.member.interest.MemberInterestRepository;
 import com.devlog.backend.member.interest.MemberInterestService;
 import com.devlog.backend.like.PostLikeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class MemberService {
 
@@ -38,6 +40,7 @@ public class MemberService {
     public MyPageResponse updateMyProfile(Long memberId, UpdateProfileRequest request) {
         Member member = findMember(memberId);
         member.updateNickname(request.getNickname().trim());
+        log.info("Member profile updated memberId={}", memberId);
 
         return createMyPageResponse(member);
     }
@@ -51,6 +54,7 @@ public class MemberService {
         memberInterestRepository.deleteAllByMemberId(memberId);
         postLikeRepository.deleteAllByMemberId(memberId);
         member.withdraw();
+        log.info("Member withdrawn memberId={}", memberId);
     }
 
     private MyPageResponse createMyPageResponse(Member member) {

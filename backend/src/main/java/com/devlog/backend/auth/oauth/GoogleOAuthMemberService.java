@@ -4,6 +4,7 @@ import com.devlog.backend.member.Member;
 import com.devlog.backend.member.MemberRepository;
 import com.devlog.backend.member.interest.MemberInterestService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GoogleOAuthMemberService {
 
     private static final OAuthProvider PROVIDER = OAuthProvider.GOOGLE;
@@ -46,6 +48,7 @@ public class GoogleOAuthMemberService {
         String profileImageUrl
     ) {
         if (memberRepository.existsByEmail(email)) {
+            log.warn("Google signup rejected reason=account_link_required");
             throw new OAuth2AuthenticationException(
                 new OAuth2Error("account_link_required"),
                 "이미 가입된 이메일입니다. 기존 계정으로 로그인한 뒤 Google 계정을 연결해 주세요."
@@ -69,6 +72,8 @@ public class GoogleOAuthMemberService {
             email
         ));
         memberInterestService.assignDefaults(member);
+
+        log.info("Google member created memberId={}", member.getId());
 
         return member;
     }

@@ -12,6 +12,7 @@ import com.devlog.backend.tag.TechnologyTagRepository;
 import com.devlog.backend.comment.CommentRepository;
 import com.devlog.backend.like.PostLikeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class PostService {
 
@@ -113,6 +115,8 @@ public class PostService {
         ));
         tags.forEach(tag -> postTagRepository.save(PostTag.create(post, tag)));
 
+        log.info("Post created postId={} memberId={} tagCount={}", post.getId(), memberId, tags.size());
+
         return PostResponse.from(
             post,
             memberId,
@@ -144,6 +148,8 @@ public class PostService {
         postTagRepository.flush();
         tags.forEach(tag -> postTagRepository.save(PostTag.create(post, tag)));
 
+        log.info("Post updated postId={} memberId={} tagCount={}", postId, memberId, tags.size());
+
         return PostResponse.from(
             post,
             memberId,
@@ -162,6 +168,7 @@ public class PostService {
         postTagRepository.deleteAllByPostId(postId);
         postLikeRepository.deleteAllByPostId(postId);
         postRepository.delete(post);
+        log.info("Post deleted postId={} memberId={}", postId, memberId);
     }
 
     private Post findOwnedPost(Long memberId, Long postId) {
@@ -169,6 +176,7 @@ public class PostService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
 
         if (post.getMember() == null || !post.getMember().getId().equals(memberId)) {
+            log.warn("Post mutation rejected postId={} memberId={} reason=not_owner", postId, memberId);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인이 작성한 게시글만 변경할 수 있습니다.");
         }
         return post;

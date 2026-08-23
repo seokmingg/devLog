@@ -8,6 +8,7 @@ import com.devlog.backend.member.MemberRepository;
 import com.devlog.backend.post.Post;
 import com.devlog.backend.post.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class CommentService {
 
@@ -52,6 +54,7 @@ public class CommentService {
             member,
             request.getContents().trim()
         ));
+        log.info("Comment created commentId={} postId={} memberId={}", comment.getId(), postId, memberId);
         return CommentResponse.from(comment, memberId);
     }
 

@@ -4,6 +4,7 @@ import com.devlog.backend.member.Member;
 import com.devlog.backend.member.MemberStatus;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -21,6 +22,7 @@ import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RefreshTokenService {
 
     public static final String COOKIE_NAME = "DEVLOG_REFRESH_TOKEN";
@@ -61,6 +63,7 @@ public class RefreshTokenService {
             Duration.between(LocalDateTime.now(), expiresAt).toSeconds()
         );
         addCookie(response, rawToken, remainingSeconds);
+        log.info("Refresh token issued memberId={} expiresAt={}", member.getId(), expiresAt);
     }
 
     @Transactional
@@ -71,25 +74,35 @@ public class RefreshTokenService {
         RefreshToken refreshToken = findUsableToken(rawToken);
         refreshToken.revoke(LocalDateTime.now());
         issueUntil(refreshToken.getMember(), refreshToken.getExpiresAt(), response);
+        log.info("Refresh token rotated memberId={}", refreshToken.getMember().getId());
         return jwtTokenProvider.createAccessToken(refreshToken.getMember());
     }
 
     @Transactional
     public void revoke(String rawToken, HttpServletResponse response) {
+        final boolean[] revoked = {false};
         if (rawToken != null && !rawToken.isBlank()) {
             refreshTokenRepository
                 .findByTokenHashAndRevokedAtIsNull(hash(rawToken))
-                .ifPresent(token -> token.revoke(LocalDateTime.now()));
+                .ifPresent(token -> {
+                    token.revoke(LocalDateTime.now());
+                    revoked[0] = true;
+                    log.info("Refresh token revoked memberId={}", token.getMember().getId());
+                });
         }
 
         clearCookie(response);
+        if (!revoked[0]) {
+            log.debug("Refresh token revoke requested without an active token");
+        }
     }
 
     @Transactional
     public void revokeAll(Long memberId) {
         LocalDateTime now = LocalDateTime.now();
-        refreshTokenRepository.findAllByMemberIdAndRevokedAtIsNull(memberId)
-            .forEach(token -> token.revoke(now));
+        var activeTokens = refreshTokenRepository.findAllByMemberIdAndRevokedAtIsNull(memberId);
+        activeTokens.forEach(token -> token.revoke(now));
+        log.info("All refresh tokens revoked memberId={} count={}", memberId, activeTokens.size());
     }
 
     public void clearRefreshTokenCookie(HttpServletResponse response) {
@@ -98,19 +111,25 @@ public class RefreshTokenService {
 
     private RefreshToken findUsableToken(String rawToken) {
         if (rawToken == null || rawToken.isBlank()) {
+            log.warn("Refresh token rejected reason=missing");
             throw unauthorized();
         }
 
         RefreshToken refreshToken = refreshTokenRepository
             .findByTokenHashAndRevokedAtIsNull(hash(rawToken))
-            .orElseThrow(this::unauthorized);
+            .orElseThrow(() -> {
+                log.warn("Refresh token rejected reason=unknown_or_revoked");
+                return unauthorized();
+            });
 
         if (!refreshToken.isUsable(LocalDateTime.now())) {
+            log.warn("Refresh token rejected memberId={} reason=expired", refreshToken.getMember().getId());
             throw unauthorized();
         }
 
         if (refreshToken.getMember().getStatus() != MemberStatus.ACTIVE) {
             refreshToken.revoke(LocalDateTime.now());
+            log.warn("Refresh token rejected memberId={} reason=inactive_member", refreshToken.getMember().getId());
             throw unauthorized();
         }
 

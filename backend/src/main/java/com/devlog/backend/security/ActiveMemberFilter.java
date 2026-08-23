@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ActiveMemberFilter extends OncePerRequestFilter {
 
     private final MemberRepository memberRepository;
@@ -35,6 +37,7 @@ public class ActiveMemberFilter extends OncePerRequestFilter {
                 .orElse(false);
 
             if (!active) {
+                log.warn("Authenticated request rejected memberId={} reason=inactive_or_missing", jwt.getSubject());
                 SecurityContextHolder.clearContext();
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "사용할 수 없는 계정입니다.");
                 return;

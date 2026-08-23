@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final OAuthAccountRepository oauthAccountRepository;
@@ -33,6 +35,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             .orElseThrow(() -> new IllegalStateException("Google 계정 연결 정보를 찾을 수 없습니다."));
 
         refreshTokenService.issue(oauthAccount.getMember(), response);
+        log.info("Google login completed memberId={}", oauthAccount.getMember().getId());
 
         if (request.getSession(false) != null) {
             request.getSession(false).invalidate();

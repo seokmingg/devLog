@@ -4,6 +4,7 @@ import com.devlog.backend.auth.dto.LoginRequest;
 import com.devlog.backend.member.Member;
 import com.devlog.backend.member.MemberStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class LocalLoginService {
 
@@ -33,16 +35,19 @@ public class LocalLoginService {
 
         Member member = credential.getMember();
         if (member.getStatus() != MemberStatus.ACTIVE) {
+            log.warn("Local login rejected memberId={} reason=inactive_member", member.getId());
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN,
                 "사용할 수 없는 계정입니다."
             );
         }
 
+        log.info("Local login completed memberId={}", member.getId());
         return member;
     }
 
     private ResponseStatusException invalidCredentials() {
+        log.warn("Local login rejected reason=invalid_credentials");
         return new ResponseStatusException(
             HttpStatus.UNAUTHORIZED,
             "이메일 또는 비밀번호가 올바르지 않습니다."
