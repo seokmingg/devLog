@@ -54,8 +54,8 @@ export function Login() {
                 <div className={styles.heading}>
                     <h1 id="login-title">로그인</h1>
                     <p>개발 기록을 이어서 작성해 보세요.</p>
-                    <p>id:guest@guest.com</p>
-                    <p>pw:12345678</p>
+                    {/*<p>id:guest@guest.com</p>*/}
+                    {/*<p>pw:12345678</p>*/}
                 </div>
                 {signupCompleted && (
                     <p className={styles.success} role="status">
