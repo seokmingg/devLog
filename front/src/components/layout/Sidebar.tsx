@@ -18,7 +18,7 @@ export function Sidebar() {
       </nav>
       <footer className={styles.footer}>
         <strong>DevLog Inc.</strong><span>대표 : 홍석민</span><span>사업자등록번호 : 123-45-67890</span>
-        <span>대표번호 : 010-9953-1506</span><span>대전 중구 중촌동 123</span><small>© 2026 DevLog</small>
+        <span>대표번호 : 010-1234-5678</span><span>대전 중구 중촌동 123</span><small>© 2026 DevLog</small>
       </footer>
     </aside>
   )
