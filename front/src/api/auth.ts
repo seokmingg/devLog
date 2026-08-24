@@ -23,7 +23,7 @@ export async function login(request: LoginRequestDto): Promise<RestoredSession> 
         return {token, member: memberResponse.data}
     } catch (error) {
         setAccessToken(null)
-        //
+
         throw error
     }
 }
