@@ -6,6 +6,7 @@ import com.devlog.backend.auth.token.AuthProperties;
 import com.devlog.backend.auth.token.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,8 +16,13 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties(AuthProperties.class)
@@ -30,6 +36,7 @@ public class SecurityConfig {
         ActiveMemberFilter activeMemberFilter
     ) throws Exception {
         http
+            .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/api/**")
             )
@@ -41,6 +48,7 @@ public class SecurityConfig {
                     "/api/auth/logout",
                     "/oauth2/**",
                     "/login/oauth2/**",
+                    "/actuator/health",
                     "/error"
                 ).permitAll()
                 .anyRequest().authenticated()
@@ -59,6 +67,22 @@ public class SecurityConfig {
             .logout(Customizer.withDefaults());
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(
+        @Value("${app.cors.allowed-origins:http://localhost:5173}") List<String> allowedOrigins
+    ) {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Request-Id"));
+        configuration.setExposedHeaders(List.of("X-Request-Id"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
