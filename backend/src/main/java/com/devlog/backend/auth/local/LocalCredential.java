@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Entity
 @Table(name = "local_credentials")
@@ -51,7 +52,7 @@ public class LocalCredential {
 
     @PrePersist
     private void onCreate() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         createdAt = now;
         passwordChangedAt = now;
     }

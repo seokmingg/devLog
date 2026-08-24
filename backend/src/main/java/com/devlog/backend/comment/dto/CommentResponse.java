@@ -5,7 +5,8 @@ import com.devlog.backend.comment.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class CommentResponse {
     private final String authorName;
     private final String authorProfileImageUrl;
     private final String contents;
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
     @JsonProperty("isMine")
     private final boolean isMine;
 
@@ -25,7 +26,7 @@ public class CommentResponse {
             comment.getMember().getNickname(),
             comment.getMember().getProfileImageUrl(),
             comment.getContents(),
-            comment.getCreatedAt(),
+            comment.getCreatedAt().atOffset(ZoneOffset.UTC),
             comment.getMember().getId().equals(currentMemberId)
         );
     }

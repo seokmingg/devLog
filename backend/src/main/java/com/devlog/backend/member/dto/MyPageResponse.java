@@ -5,7 +5,8 @@ import com.devlog.backend.tag.dto.TechnologyTagResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Getter
@@ -18,7 +19,7 @@ public class MyPageResponse {
     private final String profileImageUrl;
     private final String role;
     private final String status;
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
     private final List<String> loginMethods;
     private final List<TechnologyTagResponse> interests;
 
@@ -34,7 +35,7 @@ public class MyPageResponse {
             member.getProfileImageUrl(),
             member.getRole().name(),
             member.getStatus().name(),
-            member.getCreatedAt(),
+            member.getCreatedAt().atOffset(ZoneOffset.UTC),
             loginMethods,
             interests
         );

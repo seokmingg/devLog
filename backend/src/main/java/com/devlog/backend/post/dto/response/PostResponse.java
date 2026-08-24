@@ -5,7 +5,8 @@ import com.devlog.backend.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,7 @@ public class PostResponse {
     private final String title;
     private final String contents;
     private final AuthorResponse author;
-    private final LocalDateTime createdAt;
+    private final OffsetDateTime createdAt;
     private final String kind;
     private final long likes;
     private final boolean likedByMe;
@@ -44,7 +45,7 @@ public class PostResponse {
                 post.getAuthorTone(),
                 linkedMember ? post.getMember().getProfileImageUrl() : null
             ),
-            post.getCreatedAt(),
+            post.getCreatedAt().atOffset(ZoneOffset.UTC),
             post.getKind(),
             likeCount,
             likedByMe,

@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Entity
@@ -135,7 +136,7 @@ public class Post {
             initials,
             nickname,
             "blue",
-            LocalDateTime.now(),
+            LocalDateTime.now(ZoneOffset.UTC),
             kind,
             0,
             false,

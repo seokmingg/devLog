@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Base64;
 
 @Service
@@ -36,7 +37,7 @@ public class RefreshTokenService {
     public void issue(Member member, HttpServletResponse response) {
         issueUntil(
             member,
-            LocalDateTime.now().plus(authProperties.getRefreshTokenExpiration()),
+            LocalDateTime.now(ZoneOffset.UTC).plus(authProperties.getRefreshTokenExpiration()),
             response
         );
     }
@@ -60,7 +61,7 @@ public class RefreshTokenService {
 
         long remainingSeconds = Math.max(
             0,
-            Duration.between(LocalDateTime.now(), expiresAt).toSeconds()
+            Duration.between(LocalDateTime.now(ZoneOffset.UTC), expiresAt).toSeconds()
         );
         addCookie(response, rawToken, remainingSeconds);
         log.info("Refresh token issued memberId={} expiresAt={}", member.getId(), expiresAt);
@@ -72,7 +73,7 @@ public class RefreshTokenService {
         HttpServletResponse response
     ) {
         RefreshToken refreshToken = findUsableToken(rawToken);
-        refreshToken.revoke(LocalDateTime.now());
+        refreshToken.revoke(LocalDateTime.now(ZoneOffset.UTC));
         issueUntil(refreshToken.getMember(), refreshToken.getExpiresAt(), response);
         log.info("Refresh token rotated memberId={}", refreshToken.getMember().getId());
         return jwtTokenProvider.createAccessToken(refreshToken.getMember());
@@ -85,7 +86,7 @@ public class RefreshTokenService {
             refreshTokenRepository
                 .findByTokenHashAndRevokedAtIsNull(hash(rawToken))
                 .ifPresent(token -> {
-                    token.revoke(LocalDateTime.now());
+                    token.revoke(LocalDateTime.now(ZoneOffset.UTC));
                     revoked[0] = true;
                     log.info("Refresh token revoked memberId={}", token.getMember().getId());
                 });
@@ -99,7 +100,7 @@ public class RefreshTokenService {
 
     @Transactional
     public void revokeAll(Long memberId) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         var activeTokens = refreshTokenRepository.findAllByMemberIdAndRevokedAtIsNull(memberId);
         activeTokens.forEach(token -> token.revoke(now));
         log.info("All refresh tokens revoked memberId={} count={}", memberId, activeTokens.size());
@@ -122,13 +123,13 @@ public class RefreshTokenService {
                 return unauthorized();
             });
 
-        if (!refreshToken.isUsable(LocalDateTime.now())) {
+        if (!refreshToken.isUsable(LocalDateTime.now(ZoneOffset.UTC))) {
             log.warn("Refresh token rejected memberId={} reason=expired", refreshToken.getMember().getId());
             throw unauthorized();
         }
 
         if (refreshToken.getMember().getStatus() != MemberStatus.ACTIVE) {
-            refreshToken.revoke(LocalDateTime.now());
+            refreshToken.revoke(LocalDateTime.now(ZoneOffset.UTC));
             log.warn("Refresh token rejected memberId={} reason=inactive_member", refreshToken.getMember().getId());
             throw unauthorized();
         }
