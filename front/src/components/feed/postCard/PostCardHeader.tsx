@@ -4,6 +4,7 @@ import {Avatar} from '../../common/Avatar.tsx'
 import {deletePost} from '../../../api/feed/postCard/posts.ts'
 import {useNavigate} from 'react-router-dom'
 import styles from './PostCard.module.css'
+import {formatRelativeTime} from './postComments/commentUtils.ts'
 
 interface PostCardHeaderProps extends Pick<Post, 'author' | 'createdAt'> {
     postId: number
@@ -76,7 +77,7 @@ export function PostCardHeader({postId, author, createdAt, isMine, onDelete}: Po
                 />
                 <div>
                     <strong>{author.name}</strong>
-                    <span>{createdAt}</span>
+                    <span>{formatRelativeTime(createdAt)}</span>
                 </div>
             </div>
 
