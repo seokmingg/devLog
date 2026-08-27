@@ -2,7 +2,7 @@
 
 > 開発者が学習内容や技術的な経験を共有し、交流できるコミュニティサービスです。
 
-[Webサイト](https://www.seokmin.com/)
+[Webサイト](https://www.seokmin.com/)  https://www.seokmin.com
 
 > **開発状況：開発中（2026年7月〜）**
 >
